@@ -1,0 +1,188 @@
+:root {
+  --card-background: #FFFFFF;
+  --card-border: #E5E5E5;
+}
+
+* {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.card {
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  background-color: var(--card-background);
+  -webkit-filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+          filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.jumperListSection {
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  height: 100vh;
+}
+
+.jumperListSection h1, .jumperListSection p {
+  text-align: center;
+}
+
+.jumperListSection .jumperListInputContainer {
+  text-align: center;
+}
+
+.jumperListSection .jumperListContainer {
+  height: 90vh;
+  padding: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  overflow-y: scroll;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.jumperListSection .jumper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 5px;
+  width: 20vw;
+  min-height: 7vh;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 8px;
+}
+
+.jumperListSection .jumper:hover {
+  cursor: -webkit-grab;
+  cursor: grab;
+}
+
+.loadContainer {
+  width: 75vw;
+  height: 100vh;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (1fr)[4];
+      grid-template-columns: repeat(4, 1fr);
+}
+
+.loadContainer .load {
+  height: calc(95vh / 2);
+  width: calc((75vw / 4.5));
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+  -ms-grid-column-align: center;
+      justify-self: center;
+}
+
+.loadContainer .load .loadId {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 55px;
+  width: 55px;
+  color: var(--card-border);
+  -webkit-backdrop-filter: blur(4px);
+          backdrop-filter: blur(4px);
+  font-weight: bold;
+  text-align: center;
+  font-size: 2rem;
+  background-color: #9289ff;
+  margin-top: 8px;
+  margin-left: 8px;
+  border-radius: 50%;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+          filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.loadContainer .load .jumperList {
+  margin: 10px;
+  height: 75%;
+}
+
+.loadContainer .load ul {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin-top: 10px;
+  height: 75%;
+}
+
+.loadContainer .load .jumper {
+  width: 95%;
+  height: 30px;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.loadContainer .load .cancel {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  position: absolute;
+  right: 8px;
+  font-weight: bold;
+  color: var(--card-border);
+}
+
+.App {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  border: 1px solid greenyellow;
+}
+
+.margin {
+  margin-right: 5px;
+}
+
+.cancel:hover {
+  cursor: pointer;
+}
+
+.hide {
+  display: none;
+}
+/*# sourceMappingURL=styles.css.map */
