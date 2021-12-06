@@ -13,14 +13,12 @@ function JumperList() {
     useEffect(() => {
         if (jumpers.length < 1) return
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(jumpers))
-        console.log(jumpers)
     }, [jumpers])
 
     useEffect(() => {
         const storedJSON: string = localStorage.getItem(LOCAL_STORAGE_KEY) || ''
         if (storedJSON === '') return
         const storedJumpers = JSON.parse(storedJSON)
-        console.log(storedJumpers)
         if (storedJumpers !== '') {
             setJumpers(storedJumpers)
         }
@@ -31,24 +29,15 @@ function JumperList() {
         if (jumperNameRef?.current?.value === null) {
             return;
         }
-        if (jumperNameRef === null) {
-            
-        }
-        else {
-            if (jumperNameRef.current === null) {
-
-            }
-            else {
+        if (jumperNameRef !== null) {
+            if (jumperNameRef.current !== null) {
                 name = jumperNameRef.current.value;
                 jumperNameRef.current.value = '';
+                setJumpers(prevJumpers => {
+                    return [...prevJumpers, {id: uuidv4().toString(), name: name}]
+                })
             }
         }
-        if (name === '') {
-            return;
-        }
-        setJumpers(prevJumpers => {
-            return [...prevJumpers, {id: uuidv4().toString(), name: name}]
-        })
     }
 
     function handleClear() {
