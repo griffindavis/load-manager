@@ -24,6 +24,7 @@ function Load(props: { id: string, number?: number, initialJumperList: IJumperOb
 
     function handleCancel(e: BaseSyntheticEvent) {
         const id = e.target.offsetParent.firstChild.innerText;
+        // do this better with html dataset
         setJumpers(jumperList.filter(entry => {
             return entry.id !== id;
         }));

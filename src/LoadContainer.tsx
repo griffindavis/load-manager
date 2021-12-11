@@ -33,7 +33,10 @@ function LoadContainer() {
         setLoadList(previousLoads => {
             return[...previousLoads, {id: uuidv4().toString(), number: loadList.length+1, jumperList: [{id: newId, name: newName}]}]
         });
-        scrollToRef?.current?.scrollIntoView({ block: 'end', behavior: 'smooth' });
+        setTimeout(() => { // have to have a short timeout to make this actually work
+            scrollToRef?.current?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+        }, 100);
+        
     }
 
     function handleOnDragOver(event: React.DragEvent<HTMLDivElement>) {
@@ -42,7 +45,7 @@ function LoadContainer() {
 
     function removeLoad(id: string) {
         let count = 0;
-        loadList.forEach(load => {
+        loadList.forEach(load => { // update the load count
             if (load.id === id) return;
             count++;
             load.number = count;
