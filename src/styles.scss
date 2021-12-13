@@ -1,224 +1,232 @@
-:root { // define some variables
-  --card-background: #FFFFFF;
-  --card-border: #E5E5E5;
-  --color-selected: #9289FF;
+:root {
+	// define some variables
+	--card-background: #ffffff;
+	--card-border: #e5e5e5;
+	--color-selected: #9289ff;
 }
 
-* { // setup defaults for the entire page
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
+* {
+	// setup defaults for the entire page
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
 }
 
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	margin: 0;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+		'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+		sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
-.card { 
-  border: 1px solid var(--card-border);
-  border-radius: 10px;
-  background-color: var(--card-background);
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+.card {
+	border: 1px solid var(--card-border);
+	border-radius: 10px;
+	background-color: var(--card-background);
+	filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
 
 .jumperListSection {
-  justify-content: center;
-  flex-grow: 1;
-  height: 100vh;
+	justify-content: center;
+	flex-grow: 1;
+	height: 100vh;
 
-  h1, p { // jumper list header
-    text-align: center;
-  }
+	h1,
+	p {
+		// jumper list header
+		text-align: center;
+	}
 
-  .jumperListInputContainer {
-    text-align: center;
-  }
+	.jumperListInputContainer {
+		text-align: center;
+	}
 
-  .listOfJumpers {
-    height: 85%;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    overflow-y: scroll;
-    align-items: center;
-  }
+	.listOfJumpers {
+		height: 85%;
+		padding: 10px;
+		display: flex;
+		flex-direction: column;
+		overflow-y: scroll;
+		align-items: center;
+	}
 
-  .jumper { // each jumper item
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 5px;
-    width: 20vw;
-    min-height: 5vh;
-    max-height: 200px;
-    align-items: center;
-    margin-bottom: 8px;
-    overflow: visible;
-  }
+	.jumper {
+		// each jumper item
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		padding: 5px;
+		width: 20vw;
+		min-height: 5vh;
+		max-height: 200px;
+		align-items: center;
+		margin-bottom: 8px;
+		overflow: visible;
+	}
 }
 
 .jumper.hide {
-  display: none;
+	display: none;
 }
 
 .hide {
-  display: none; // TODO: fix this dumb thing
+	display: none; // TODO: fix this dumb thing
 }
 
 .loadContainer {
-  width: 75vw;
-  height: 100vh;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-auto-flow: row;
-  grid-auto-rows: 50%;
-  overflow-y: scroll;
+	width: 75vw;
+	height: 100vh;
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	grid-auto-flow: row;
+	grid-auto-rows: 50%;
+	overflow-y: scroll;
 
-  .load {
-    height: calc(95vh / 2);
-    width: calc((75vw / 4.5));
-    align-self: center;
-    justify-self: center;
+	.load {
+		height: calc(95vh / 2);
+		width: calc((75vw / 4.5));
+		align-self: center;
+		justify-self: center;
 
-    .loadId {
-      display: flex;
-      height: 55px; // TODO: make this dynamic
-      width: 55px; // TODO: make this dynamic
-      color: var(--card-border);
-      backdrop-filter: blur(4px);
-      font-weight: bold;
-      text-align: center;
-      font-size: 2rem;
-      background-color: var(--color-selected);
-      margin-top: 8px;
-      margin-left: 8px;
-      border-radius: 50%;
-      align-items: center;
-      justify-content: center;
-      filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-    }
+		.loadId {
+			display: flex;
+			height: 55px; // TODO: make this dynamic
+			width: 55px; // TODO: make this dynamic
+			color: var(--card-border);
+			backdrop-filter: blur(4px);
+			font-weight: bold;
+			text-align: center;
+			font-size: 2rem;
+			background-color: var(--color-selected);
+			margin-top: 8px;
+			margin-left: 8px;
+			border-radius: 50%;
+			align-items: center;
+			justify-content: center;
+			filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+		}
 
-    .jumperList {
-      margin: 10px;
-      height: 70%;
-    }
+		.jumperList {
+			width: 90%;
+			margin: 10px;
+			height: 70%;
+		}
 
-    button {
-      margin-left: 10px;
-    }
+		button {
+			margin-left: 10px;
+		}
 
-    ul {
-      display: flex;
-      flex-direction: column;
-      margin-top: 10px;
-      height: 75%;
-    }
+		ul {
+			display: flex;
+			flex-direction: column;
+			margin-top: 10px;
+			height: 75%;
+			width: 100%;
+			align-items: center;
+		}
 
-    .jumper {
-      width: 95%;
-      height: 30px;
-      margin-bottom: 8px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-  }
+		.jumper {
+			width: 95%;
+			height: 30px;
+			margin-bottom: 8px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+	}
 }
 
 .cancel {
-  display: flex;
-  position: absolute;
-  right: 8px;
-  font-weight: bold;
-  color: var(--card-border);
-  min-height: 50%; // make the hitbox larger
-  min-width: 10%;
-  justify-content: center;
-  align-items: center;
+	display: flex;
+	position: absolute;
+	right: 8px;
+	font-weight: bold;
+	color: var(--card-border);
+	min-height: 50%; // make the hitbox larger
+	min-width: 10%;
+	justify-content: center;
+	align-items: center;
 }
-.scrollTo { // div to force a scroll when adding a new load
-  display: block;
+.scrollTo {
+	// div to force a scroll when adding a new load
+	display: block;
 }
 
 .App {
-  display: flex;
-  width: 100vw;
-  height: 100vh;
+	display: flex;
+	width: 100vw;
+	height: 100vh;
 }
 
 .margin {
-  margin-right: 5px;
+	margin-right: 5px;
 }
 .cancel:hover {
-  cursor: pointer;
+	cursor: pointer;
 }
 
 .filterContainer {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
 }
 
 .filter {
-  display: flex;
-  height: 5vh;
-  width: 30%;
-  align-items: center;
-  justify-content: center;
-  //border: 1px solid blue;
+	display: flex;
+	height: 5vh;
+	width: 30%;
+	align-items: center;
+	justify-content: center;
+	//border: 1px solid blue;
 }
 
 .faImage:hover {
-  cursor: pointer;
-  font-size: 2rem;
+	cursor: pointer;
+	font-size: 2rem;
 }
 
 .faImage {
-  font-size: 1.5rem;
-  color: var(--card-border);
+	font-size: 1.5rem;
+	color: var(--card-border);
 }
 
 .faImage.selected {
-  color: var(--color-selected)
+	color: var(--color-selected);
 }
 
 .details {
-  width: 20vw;
-  height: 0px;
-  line-height: 0;
-  align-items: center;
-  overflow: hidden;
-  border: 0;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-  transition: all .5s ease-in-out;
+	width: 20vw;
+	height: 0px;
+	line-height: 0;
+	align-items: center;
+	overflow: hidden;
+	border: 0;
+	filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+	transition: all 0.5s ease-in-out;
 }
 
 .details.expanded {
-  height: 50px;
-  margin-bottom: 8px; // fix this as a variable
+	height: 50px;
+	margin-bottom: 8px; // fix this as a variable
 }
 
 .dropdown-button {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--card-border);
-  border-radius: 10px;
-  background-color: var(--card-background);
-  min-height: 5vh;
-  min-width: 25%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid var(--card-border);
+	border-radius: 10px;
+	background-color: var(--card-background);
+	min-height: 5vh;
+	min-width: 25%;
 }
 
-
 .dropdown-menu {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
 }

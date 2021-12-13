@@ -1,7 +1,7 @@
 :root {
-  --card-background: #FFFFFF;
-  --card-border: #E5E5E5;
-  --color-selected: #9289FF;
+  --card-background: #ffffff;
+  --card-border: #e5e5e5;
+  --color-selected: #9289ff;
 }
 
 * {
@@ -37,7 +37,8 @@ body {
   height: 100vh;
 }
 
-.jumperListSection h1, .jumperListSection p {
+.jumperListSection h1,
+.jumperListSection p {
   text-align: center;
 }
 
@@ -140,6 +141,7 @@ body {
 }
 
 .loadContainer .load .jumperList {
+  width: 90%;
   margin: 10px;
   height: 70%;
 }
@@ -158,6 +160,10 @@ body {
           flex-direction: column;
   margin-top: 10px;
   height: 75%;
+  width: 100%;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .loadContainer .load .jumper {
@@ -265,8 +271,8 @@ body {
   border: 0;
   -webkit-filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
           filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-  -webkit-transition: all .5s ease-in-out;
-  transition: all .5s ease-in-out;
+  -webkit-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
 }
 
 .details.expanded {
