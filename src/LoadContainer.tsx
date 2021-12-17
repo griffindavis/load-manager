@@ -51,7 +51,6 @@ function LoadContainer() {
 				});
 			}, 100);
 		} else if (event.dataTransfer.types[0] === 'text/load') {
-			determinePosition(event);
 			reorderLoads(
 				event.dataTransfer.getData('text/load'),
 				determinePosition(event)
@@ -68,16 +67,18 @@ function LoadContainer() {
 		return 0;
 	}
 
+	// position is the new position
 	function reorderLoads(id: string, position: number) {
 		const newList: ILoadObject[] = [...loadList];
 		const index = getLoadPosition(id);
+
 		if (index + 1 < position) {
 			for (let i = position - 1; i >= index; i--) {
 				newList[i] = loadList[i + 1];
 			}
 			newList[position - 1] = loadList[index];
 		} else if (index + 1 > position) {
-			for (let i = 0; i <= position; i++) {
+			for (let i = position - 1; i <= index; i++) {
 				newList[i] = loadList[i > 0 ? i - 1 : 0];
 			}
 			newList[position - 1] = loadList[index];
@@ -94,9 +95,11 @@ function LoadContainer() {
 		const currentX = event.clientX;
 		const currentY = event.clientY;
 		const loads = Array.from(document.querySelectorAll('.load'));
-		const currentNumber = event.dataTransfer.getData('text/loadNum') || 0;
+		const currentNumber = parseInt(
+			event.dataTransfer.getData('text/loadNum') || '0'
+		);
 
-		let closest = loads.length - 1;
+		let closest = loads.length - 1; // this is the index
 		let minimumDistance = window.innerWidth;
 		for (let i = 0; i < loads.length; i++) {
 			const box = loads[i].getBoundingClientRect();
@@ -113,6 +116,8 @@ function LoadContainer() {
 		let proposed = 0;
 		if (closest + 1 < currentNumber) {
 			proposed = minimumDistance < 0 ? closest + 1 : closest + 2;
+		} else if (closest + 1 === currentNumber) {
+			return currentNumber;
 		} else {
 			proposed = minimumDistance > 0 ? closest + 1 : closest;
 		}
