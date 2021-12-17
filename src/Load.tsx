@@ -8,6 +8,7 @@ function Load(
 		number?: number;
 		initialJumperList: IJumperObject[];
 		removeLoad: (id: string) => void;
+		setDraggingLoad: (loadId: string, num: number) => void;
 	},
 	key: string
 ) {
@@ -48,6 +49,7 @@ function Load(
 
 	function handleOnDrop(event: React.DragEvent<HTMLDivElement>) {
 		event.preventDefault();
+		document.querySelector('.dragging')?.classList?.remove('dragging');
 		if (event.dataTransfer.types[0] === 'text/jumper') {
 			const data = JSON.parse(event.dataTransfer.getData('text/jumper'));
 			const newId = data.id;
@@ -90,8 +92,18 @@ function Load(
 				event.dataTransfer.setData('text/load', props.id);
 				if (props.number !== undefined) {
 					event.dataTransfer.setData('text/loadNum', props.number.toString());
+					props.setDraggingLoad(props.id, props.number);
+					event.currentTarget.classList.add('dragging');
+					const el = event.currentTarget.children[1];
+					if (el !== null) {
+						const box = el.getBoundingClientRect();
+						event.dataTransfer.setDragImage(
+							el,
+							event.clientX - box.left,
+							event.clientY - box.top
+						);
+					}
 				}
-				
 			}}
 		>
 			<div className="loadId">{props.number?.toString()}</div>
