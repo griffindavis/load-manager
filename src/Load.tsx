@@ -2,24 +2,26 @@
 import React, { BaseSyntheticEvent, useEffect, useState } from 'react';
 import IJumperObject from './IJumperObject';
 
-function Load(
-	props: {
-		id: string;
-		number?: number;
-		initialJumperList: IJumperObject[];
-		removeLoad: (id: string) => void;
-		style: React.CSSProperties;
-		setDragState: React.Dispatch<
-			React.SetStateAction<{
-				isDragging: boolean;
-				loadNumber: number;
-				mouseX: number;
-				mouseY: number;
-			}>
-		>;
-	},
-	key: string
-) {
+function Load(props: {
+	id: string;
+	number?: number;
+	initialJumperList: IJumperObject[];
+	removeLoad: (id: string) => void;
+	style: React.CSSProperties;
+	key: string;
+	setDragState: React.Dispatch<
+		React.SetStateAction<{
+			isDragging: boolean;
+			loadNumber: number;
+			loadId: string;
+			mouseX: number;
+			mouseY: number;
+			deltaX: number;
+			deltaY: number;
+			order: number[];
+		}>
+	>;
+}) {
 	const [jumperList, setJumpers] = useState<IJumperObject[]>([]);
 	const LOCAL_STORAGE_KEY = 'load' + props.id + '.jumperList';
 
@@ -97,23 +99,14 @@ function Load(
 			onDragOver={handleOnDragOver}
 			draggable={false}
 			style={props.style}
-			onMouseMove={(event) => {
-				props.setDragState((previousState) => {
-					return {
-						...previousState,
-						mouseX: event.clientX,
-						mouseY: event.clientY,
-					};
-				});
-			}}
 			onMouseDown={(event) => {
+				console.log(props.number);
 				props.setDragState((previousState) => {
 					return {
 						...previousState,
 						loadNumber: props.number || 0,
-						mouseX: event.clientX,
-						mouseY: event.clientY,
 						isDragging: true,
+						mouseX: event.clientX,
 					};
 				});
 			}}
@@ -123,12 +116,13 @@ function Load(
 						...previousState,
 						loadNumber: 0,
 						isDragging: false,
+						mouseX: 0,
+						deltaX: 0,
 					};
 				});
 			}}
 		>
 			<div className="loadId">{props.number?.toString()}</div>
-
 			<div className="jumperList">
 				<ul>
 					{jumperList === undefined
@@ -146,6 +140,7 @@ function Load(
 								);
 						  })}
 				</ul>
+				<p>{props.id}</p>
 			</div>
 			<button onClick={handleLoadDelete}>Delete</button>
 		</div>

@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Load from './Load';
 import { v4 as uuidv4 } from 'uuid';
 import IJumperObject from './IJumperObject';
 import { Motion, spring } from 'react-motion';
+import range from 'lodash.range';
 
 interface ILoadObject {
 	id: string;
@@ -17,9 +18,22 @@ function LoadContainer() {
 	const [dragState, setDragState] = useState({
 		isDragging: false,
 		loadNumber: 0,
+		loadId: '',
 		mouseX: 0,
 		mouseY: 0,
+		deltaX: 0,
+		deltaY: 0,
+		order: [0],
 	});
+
+	function reinsert(arr: number[], from: number, to: number) {
+		const _arr = arr.slice(0);
+		const val = _arr[from];
+		_arr.splice(from, 1);
+		_arr.splice(to, 0, val);
+		console.log(_arr);
+		return _arr;
+	}
 
 	useEffect(() => {
 		const storedJSON: string = localStorage.getItem(LOCAL_STORAGE_KEY) || '';
@@ -29,6 +43,9 @@ function LoadContainer() {
 
 	useEffect(() => {
 		localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(loadList));
+		setDragState((previousState) => {
+			return { ...previousState, order: range(loadList.length) };
+		});
 	}, [loadList]);
 
 	function handleOnDrop(event: React.DragEvent<HTMLDivElement>) {
@@ -69,42 +86,6 @@ function LoadContainer() {
 		}
 	}
 
-	function getLoadPosition(id: string) {
-		for (let i = 0; i < loadList.length; i++) {
-			if (loadList[i].id === id) {
-				return i;
-			}
-		}
-		return 0;
-	}
-
-	// position is the new position
-	function reorderLoads(id: string, position: number) {
-		const newList: ILoadObject[] = [...loadList];
-		const index = getLoadPosition(id);
-		//console.log(id);
-		//console.log(`Position: ${position}\nIndex: ${index}`);
-		if (index + 1 === position) return; // don't set loads constantly
-		if (index + 1 < position) {
-			for (let i = position - 1; i >= index; i--) {
-				newList[i] = loadList[i + 1];
-			}
-			newList[position - 1] = loadList[index];
-		} else if (index + 1 > position) {
-			for (let i = position - 1; i <= index; i++) {
-				newList[i] = loadList[i > 0 ? i - 1 : 0];
-			}
-			newList[position - 1] = loadList[index];
-		}
-		let count = 1;
-		newList.forEach((load) => {
-			load.number = count;
-			count++;
-		});
-		//setDraggingLoad(id, position);
-		setLoadList([...newList]);
-	}
-
 	function handleOnDragOver(event: React.DragEvent<HTMLDivElement>) {
 		event.preventDefault();
 		if (event.dataTransfer.types[0] !== 'text/load') {
@@ -129,85 +110,93 @@ function LoadContainer() {
 		);
 	}
 
+	const defaultSize = 210;
+	const padding = 20;
+	const size = defaultSize + padding;
+	function getSpringSize(index: number, isDragging: boolean) {
+		let val = 0;
+		if (index === 0) {
+			val = 10;
+		} else {
+			val = size * index + padding / 2;
+		}
+		return isDragging ? val + dragState.deltaX : val;
+	}
+	const springSettings = {
+		stiffness: 300,
+		damping: 50,
+	};
+
 	return (
-		<>
-			<div
-				className="loadContainer"
-				onDragOver={handleOnDragOver}
-				onDrop={handleOnDrop}
-				onMouseMove={(event) => {
-					if (!dragState.isDragging) {
-						return;
-					}
-					console.log(`X: ${dragState.mouseX}\nY: ${dragState.mouseY}`);
-					return;
-					/*
-					const currentX = event.clientX;
-					const currentY = event.clientY;
-					const loads = Array.from(document.querySelectorAll('.load'));
-					const currentNumber = dragState.loadNumber;
+		<div
+			className="loadContainer"
+			onDragOver={handleOnDragOver}
+			onDrop={handleOnDrop}
+			onMouseMove={(event) => {
+				if (dragState.isDragging) {
+					const newState = {
+						...dragState,
+						deltaX: event.clientX - dragState.mouseX,
+					};
+					if (Math.abs(dragState.deltaX) > size) {
+						const position =
+							dragState.deltaX > 0
+								? dragState.loadNumber + 1
+								: dragState.loadNumber - 1;
 
-					let closest = loads.length - 1; // this is the index
-					let minimumDistance = window.innerWidth;
-					for (let i = 0; i < loads.length; i++) {
-						const box = loads[i].getBoundingClientRect();
-						if (currentY > box.bottom || currentY < box.top) {
-							continue;
-						}
-						const middle = box.left + box.width / 2;
-						const distance = currentX - middle;
-						if (Math.abs(distance) < Math.abs(minimumDistance)) {
-							minimumDistance = distance;
-							closest = i;
-						}
+						newState.order = reinsert(
+							dragState.order,
+							dragState.loadNumber,
+							position
+						);
+						newState.loadNumber = position;
+						newState.mouseX = event.clientX;
+						newState.deltaX = 0;
 					}
-					let proposed = 0;
-					//console.log(`closest: ${closest}\nCurrent: ${currentNumber}`);
-					if (closest + 1 < currentNumber) {
-						proposed = minimumDistance < 0 ? closest + 1 : closest + 2;
-					} else if (closest + 1 === currentNumber) {
-						proposed = currentNumber;
-					} else {
-						proposed = minimumDistance > 0 ? closest + 1 : closest;
-					}
-					if (currentNumber !== proposed) {
-						//console.log(`Current: ${currentNumber}\nProposed: ${proposed}`);
-						console.log(`New position: ${proposed}`);
-						let newBox = loads[proposed - 1].getBoundingClientRect();
-						//reorderLoads(draggingLoadId.current, proposed);
-					}*/
-				}}
-			>
-				{loadList.map((load) => {
-					return (
-						<Motion
-							style={
-								load.number === dragState.loadNumber
-									? { scale: spring(1.05), x: spring(25), zindex: 100 }
-									: { scale: spring(1), x: spring(0) }
-							}
-						>
-							{({ scale, x, zindex }) => (
-								<Load
-									id={load.id}
-									number={load.number}
-									key={load.id}
-									initialJumperList={load.jumperList}
-									removeLoad={removeLoad}
-									setDragState={setDragState}
-									style={{
-										transform: `translate3d(${x}px, 0, 0)scale(${scale})`,
-										zIndex: zindex,
-									}}
-								/>
-							)}
-						</Motion>
-					);
-				})}
 
-				<div ref={scrollToRef} className="scrollTo"></div>
-			</div>
-		</>
+					setDragState(newState);
+				}
+			}}
+		>
+			{dragState.order.map((index) => {
+				return (
+					<Motion
+						style={
+							dragState.isDragging && index === dragState.loadNumber
+								? {
+										scale: spring(1.05),
+										x: spring(getSpringSize(index, true), springSettings),
+										y: spring(dragState.deltaY, springSettings),
+										zindex: 99,
+								  }
+								: {
+										scale: spring(1),
+										x: spring(getSpringSize(index, false), springSettings),
+										y: spring(0, springSettings),
+										zindex: index,
+								  }
+						}
+					>
+						{({ scale, x, y, zindex }) => (
+							<Load
+								id={loadList[dragState.order[index]]?.id}
+								number={index}
+								key={loadList[dragState.order[index]]?.id}
+								initialJumperList={[]}
+								removeLoad={removeLoad}
+								style={{
+									transform: `translate3d(${x}px, ${y}px, 0) scale(${scale})`,
+									zIndex: zindex,
+								}}
+								setDragState={setDragState}
+							/>
+						)}
+					</Motion>
+				);
+			})}
+
+			<div ref={scrollToRef} className="scrollTo"></div>
+		</div>
 	);
 }
 
