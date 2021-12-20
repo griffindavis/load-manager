@@ -112,6 +112,7 @@ body {
       align-self: center;
   -ms-grid-column-align: center;
       justify-self: center;
+  position: relative;
 }
 
 .loadContainer .load .loadId {
@@ -314,8 +315,7 @@ body {
 }
 
 .dragging {
-  -webkit-animation: shake 0.5s ease-in-out 0s infinite none;
-          animation: shake 0.5s ease-in-out 0s infinite none;
+  z-index: 100;
 }
 
 @-webkit-keyframes shake {

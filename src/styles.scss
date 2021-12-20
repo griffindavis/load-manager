@@ -90,6 +90,7 @@ body {
 		width: calc((75vw / 4.5));
 		align-self: center;
 		justify-self: center;
+		position: relative;
 
 		.loadId {
 			display: flex;
@@ -231,7 +232,9 @@ body {
 	justify-content: space-around;
 }
 .dragging {
-	animation: shake 0.5s ease-in-out 0s infinite none;
+	//animation: shake 0.5s ease-in-out 0s infinite none;
+	//transform: scale(1.05);
+	z-index: 100;
 }
 
 @keyframes shake {

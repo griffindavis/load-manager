@@ -8,7 +8,15 @@ function Load(
 		number?: number;
 		initialJumperList: IJumperObject[];
 		removeLoad: (id: string) => void;
-		setDraggingLoad: (loadId: string, num: number) => void;
+		style: React.CSSProperties;
+		setDragState: React.Dispatch<
+			React.SetStateAction<{
+				isDragging: boolean;
+				loadNumber: number;
+				mouseX: number;
+				mouseY: number;
+			}>
+		>;
 	},
 	key: string
 ) {
@@ -84,26 +92,39 @@ function Load(
 
 	return (
 		<div
-			className="load card"
+			className={`load card`}
 			onDrop={handleOnDrop}
 			onDragOver={handleOnDragOver}
-			draggable={true}
-			onDragStart={(event) => {
-				event.dataTransfer.setData('text/load', props.id);
-				if (props.number !== undefined) {
-					event.dataTransfer.setData('text/loadNum', props.number.toString());
-					props.setDraggingLoad(props.id, props.number);
-					event.currentTarget.classList.add('dragging');
-					const el = event.currentTarget.children[1];
-					if (el !== null) {
-						const box = el.getBoundingClientRect();
-						event.dataTransfer.setDragImage(
-							el,
-							event.clientX - box.left,
-							event.clientY - box.top
-						);
-					}
-				}
+			draggable={false}
+			style={props.style}
+			onMouseMove={(event) => {
+				props.setDragState((previousState) => {
+					return {
+						...previousState,
+						mouseX: event.clientX,
+						mouseY: event.clientY,
+					};
+				});
+			}}
+			onMouseDown={(event) => {
+				props.setDragState((previousState) => {
+					return {
+						...previousState,
+						loadNumber: props.number || 0,
+						mouseX: event.clientX,
+						mouseY: event.clientY,
+						isDragging: true,
+					};
+				});
+			}}
+			onMouseUp={(event) => {
+				props.setDragState((previousState) => {
+					return {
+						...previousState,
+						loadNumber: 0,
+						isDragging: false,
+					};
+				});
 			}}
 		>
 			<div className="loadId">{props.number?.toString()}</div>
