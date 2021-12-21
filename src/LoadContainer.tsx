@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import Load from './Load';
-//import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import IJumperObject from './IJumperObject';
 
 interface ILoadObject {
@@ -35,8 +35,7 @@ function LoadContainer() {
 	function handleOnDrop(event: React.DragEvent<HTMLDivElement>) {
 		event.preventDefault();
 		document.querySelector('.dragging')?.classList?.remove('dragging'); // don't let shaking persist
-		return;
-		/*
+
 		if (event.dataTransfer.types[0] === 'text/jumper') {
 			const data = JSON.parse(event.dataTransfer.getData('text/jumper'));
 			const newId = data.id;
@@ -67,7 +66,6 @@ function LoadContainer() {
 				determinePosition(event)
 			);
 		}
-		*/
 	}
 
 	function getLoadPosition(id: string) {

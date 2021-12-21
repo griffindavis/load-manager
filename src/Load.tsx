@@ -94,15 +94,6 @@ function Load(
 					event.dataTransfer.setData('text/loadNum', props.number.toString());
 					props.setDraggingLoad(props.id, props.number);
 					event.currentTarget.classList.add('dragging');
-					const el = event.currentTarget.children[1];
-					if (el !== null) {
-						const box = el.getBoundingClientRect();
-						event.dataTransfer.setDragImage(
-							el,
-							event.clientX - box.left,
-							event.clientY - box.top
-						);
-					}
 				}
 			}}
 		>
