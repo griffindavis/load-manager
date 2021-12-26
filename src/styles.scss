@@ -282,3 +282,21 @@ body {
 		transform: translate(1px, -2px) rotate(-1deg);
 	}
 }
+
+.zeroState {
+	border: 5px dashed var(--card-border);
+	border-radius: 10px;
+	margin: 1%;
+	height: 97%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #cecece;
+	font-weight: bold;
+	font-size: 1.2rem;
+}
+
+#jumper-zero-state {
+	width: 20vw;
+	text-align: center;
+}

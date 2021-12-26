@@ -168,7 +168,7 @@ function LoadContainer() {
 	return (
 		<>
 			<div
-				className="loadContainer"
+				className={`loadContainer ${loadList.length === 0 ? 'zeroState' : ''}`}
 				onDragOver={handleOnDragOver}
 				onDrop={handleOnDrop}
 			>
@@ -184,6 +184,11 @@ function LoadContainer() {
 						/>
 					);
 				})}
+				<div>
+					{loadList.length === 0
+						? 'There are no loads prepared, drag a jumper into the section to start a load!'
+						: ''}
+				</div>
 				<div ref={scrollToRef} className="scrollTo"></div>
 			</div>
 		</>
