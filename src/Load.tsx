@@ -97,7 +97,12 @@ function Load(
 				}
 			}}
 		>
-			<div className="loadId">{props.number?.toString()}</div>
+			<div className="loadHeader">
+				<div className="loadId">{props.number?.toString()}</div>
+				<div className="deleteLoad" onClick={handleLoadDelete}>
+					X
+				</div>
+			</div>
 
 			<div className="jumperList">
 				<ul>
@@ -117,7 +122,6 @@ function Load(
 						  })}
 				</ul>
 			</div>
-			<button onClick={handleLoadDelete}>Delete</button>
 		</div>
 	);
 }

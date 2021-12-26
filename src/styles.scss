@@ -115,8 +115,21 @@ body {
 			height: 70%;
 		}
 
-		button {
-			margin-left: 10px;
+		.loadHeader {
+			display: flex;
+			padding-bottom: 5%;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		.deleteLoad {
+			padding-right: 5%;
+			font-weight: bold;
+			color: var(--card-border);
+			font-size: 1.5rem;
+		}
+		.deleteLoad:hover {
+			cursor: pointer;
 		}
 
 		ul {

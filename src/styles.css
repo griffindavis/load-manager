@@ -146,8 +146,28 @@ body {
   height: 70%;
 }
 
-.loadContainer .load button {
-  margin-left: 10px;
+.loadContainer .load .loadHeader {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding-bottom: 5%;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.loadContainer .load .deleteLoad {
+  padding-right: 5%;
+  font-weight: bold;
+  color: var(--card-border);
+  font-size: 1.5rem;
+}
+
+.loadContainer .load .deleteLoad:hover {
+  cursor: pointer;
 }
 
 .loadContainer .load ul {
