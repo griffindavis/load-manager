@@ -20,10 +20,14 @@ function JumperList() {
 	});
 	const [jumpers, setJumpers] = useState<IJumperObject[]>([]);
 	const jumperNameRef = useRef<HTMLInputElement>(null);
+	const isLoaded = useRef(false);
 
 	useEffect(() => {
 		// maintain local storage of the jumper list
-		if (jumpers.length < 1) return;
+		console.log(isLoaded.current);
+		if (!isLoaded.current) {
+			return; // don't set local storage on mount
+		}
 		localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(jumpers));
 	}, [jumpers]);
 
@@ -35,6 +39,7 @@ function JumperList() {
 		if (storedJumpers !== '') {
 			setJumpers(storedJumpers);
 		}
+		isLoaded.current = true;
 	}, []);
 
 	useEffect(() => {
