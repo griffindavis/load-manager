@@ -118,7 +118,13 @@ function JumperList() {
 					onKeyDown={handleKeyDown}
 					type="text"
 					className="margin"
+					name="name"
+					required
+					autoComplete="off"
 				/>
+				<label htmlFor="name" className="label-name">
+					<span className="label-content">Name</span>
+				</label>
 				<button id="AddJumper" className="margin" onClick={handleAddJumper}>
 					Add
 				</button>
@@ -126,7 +132,6 @@ function JumperList() {
 					Clear All
 				</button>
 			</div>
-			<p>There are {jumpers.length} jumpers!</p>
 		</div>
 	);
 }
