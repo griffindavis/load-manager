@@ -28,134 +28,11 @@ body {
 	background-color: var(--card-background);
 	filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
-
 .jumperListSection {
-	height: 100vh;
-	//TODO: media query for this
-	width: 25vw; // jumper list takes up a quarter of the space
-
-	display: flex;
-
-	justify-content: center;
-	flex-direction: column;
-
-	h1,
-	p {
-		// jumper list header
-		text-align: center;
-	}
-
-	.jumperListInputContainer {
-		position: relative;
-
-		overflow: visible;
-
-		.margin {
-			margin-right: 5px; // input form spacing
-		}
-
-		input {
-			//TODO: media query
-			width: 70%;
-			//padding-top: 8%; // push this down enough so that when the label pops up it is still visable
-
-			height: 100%;
-			border: none;
-			outline: none;
-
-			position: relative;
-			font-size: 1.1rem;
-		}
-
-		input:focus + .label-name .label-content,
-		input:valid + .label-name .label-content {
-			// moving the label up on focus
-			transform: translateY(-150%);
-			transition: transform 0.3s ease;
-		}
-
-		input:focus + .label-name::after,
-		input:valid + .label-name::after {
-			// moving the label back down
-			transform: translateX(0%);
-			transition: transform 0.3s ease;
-		}
-
-		label {
-			width: 70%; // TODO: this is the same as the input
-			height: 100%;
-
-			position: absolute; //TODO: is it possible to do this without positioning absolutely? That or a way to make this responsive?
-
-			bottom: 0px;
-			left: 0px;
-			pointer-events: none; // don't absorb the click since this is over the input
-
-			border-bottom: 1px solid var(--card-border);
-			overflow: visible;
-			transition: transform 0.3s ease;
-		}
-
-		label::after {
-			// underline for the input
-			width: 100%;
-			height: 100%;
-
-			position: absolute;
-
-			border-bottom: 3px solid var(--color-selected);
-			z-index: 99;
-			transform: translateX(-100%);
-
-			content: ''; // needed for ::after
-		}
-
-		.label-content {
-			position: absolute;
-			bottom: 0px;
-			transition: transform 0.3s ease;
-		}
-	}
-
-	.listOfJumpers {
-		height: 82%; // TODO: this is horrible
-		padding: 10px;
-
-		display: flex;
-		flex-direction: column;
-		overflow-y: scroll;
-		align-items: center;
-	}
-
-	.jumper {
-		// each jumper item
-		width: 20vw;
-		min-height: 5vh;
-		max-height: 200px;
-
-		//TODO: these should be better
-		margin-bottom: 8px;
-		padding: 5px;
-
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-
-		align-items: center;
-	}
-}
-
-.jumper.hide {
-	// TODO: can this be put elsewhere given this is SASS
 	display: none;
 }
-
-.hide {
-	display: none; // TODO: fix this dumb thing
-}
-
 .loadContainer {
-	width: 75vw; //TODO: better sectioning
+	width: 100vw;
 	height: 100vh;
 
 	display: grid;
@@ -164,81 +41,80 @@ body {
 	grid-auto-rows: 50%;
 
 	overflow-y: scroll;
+}
+.load {
+	height: 90%;
+	width: 90%;
+	align-self: center;
+	justify-self: center;
 
-	.load {
-		// TODO: should this be in loadContainer or on it's own?
-		height: calc(95vh / 2);
-		width: calc((75vw / 4.5)); //TODO: some sort of media query for this
-		align-self: center;
-		justify-self: center;
+	.loadId {
+		height: 4rem;
+		width: 4rem;
 
-		.loadId {
-			height: 55px; // TODO: make this dynamic
-			width: 55px; // TODO: make this dynamic
+		display: flex;
+		margin-top: 0.5rem;
+		margin-left: 0.5rem;
+		border-radius: 50%;
 
-			display: flex;
-			margin-top: 8px;
-			margin-left: 8px;
-			border-radius: 50%;
+		align-items: center;
+		justify-content: center;
 
-			align-items: center;
-			justify-content: center;
+		font-weight: bold;
+		text-align: center;
+		font-size: 2rem;
 
-			font-weight: bold;
-			text-align: center;
-			font-size: 2rem;
+		background-color: var(--color-selected);
+		color: var(--card-border);
+		backdrop-filter: blur(4px);
+		filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+	}
 
-			background-color: var(--color-selected);
-			color: var(--card-border);
-			backdrop-filter: blur(4px);
-			filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-		}
+	.jumperList {
+		margin: 5%;
+	}
 
-		.jumperList {
-			margin: 5%;
-		}
+	.loadHeader {
+		display: flex;
+		padding-bottom: 5%;
 
-		.loadHeader {
-			display: flex;
-			padding-bottom: 5%;
+		justify-content: space-between;
+	}
 
-			align-items: center;
-			justify-content: space-between;
-		}
+	.deleteLoad {
+		margin-top: 0.5rem;
+		padding-right: 5%;
 
-		.deleteLoad {
-			padding-right: 5%;
+		font-weight: bold;
+		font-size: 1.5rem;
 
-			font-weight: bold;
-			font-size: 1.5rem;
+		color: var(--card-border);
+	}
+	.deleteLoad:hover {
+		cursor: pointer;
+	}
 
-			color: var(--card-border);
-		}
-		.deleteLoad:hover {
-			cursor: pointer;
-		}
+	ul {
+		// list of jumpers
+		height: 75%;
+		width: 100%;
 
-		ul {
-			height: 75%;
-			width: 100%;
+		display: flex;
+		flex-direction: column;
 
-			display: flex;
-			flex-direction: column;
+		margin-top: 0.5rem;
+		align-items: center;
+	}
 
-			margin-top: 10px;
-			align-items: center;
-		}
+	.jumper {
+		width: 95%;
+		min-height: 2.5rem;
 
-		.jumper {
-			width: 95%;
-			height: 30px;
+		display: flex;
+		margin-bottom: 0.5rem;
 
-			display: flex;
-			margin-bottom: 8px;
-
-			justify-content: center;
-			align-items: center;
-		}
+		justify-content: center;
+		align-items: center;
 	}
 }
 
@@ -403,4 +279,138 @@ body {
 #jumper-zero-state {
 	width: 20vw; // TODO: this likely should be done better
 	text-align: center;
+}
+@media screen {
+	@media (min-width: 800px) {
+		// less than 800px
+		.jumperListSection {
+			height: 100vh;
+			width: 25vw; // jumper list takes up a quarter of the space
+
+			display: flex;
+
+			justify-content: center;
+			flex-direction: column;
+
+			h1,
+			p {
+				// jumper list header
+				text-align: center;
+			}
+
+			.jumperListInputContainer {
+				position: relative;
+
+				overflow: visible;
+
+				.margin {
+					margin-right: 5px; // input form spacing
+				}
+
+				input {
+					//TODO: media query
+					width: 70%;
+					//padding-top: 8%; // push this down enough so that when the label pops up it is still visable
+
+					height: 100%;
+					border: none;
+					outline: none;
+
+					position: relative;
+					font-size: 1.1rem;
+				}
+
+				input:focus + .label-name .label-content,
+				input:valid + .label-name .label-content {
+					// moving the label up on focus
+					transform: translateY(-150%);
+					transition: transform 0.3s ease;
+				}
+
+				input:focus + .label-name::after,
+				input:valid + .label-name::after {
+					// moving the label back down
+					transform: translateX(0%);
+					transition: transform 0.3s ease;
+				}
+
+				label {
+					width: 70%; // TODO: this is the same as the input
+					height: 100%;
+
+					position: absolute; //TODO: is it possible to do this without positioning absolutely? That or a way to make this responsive?
+
+					bottom: 0px;
+					left: 0px;
+					pointer-events: none; // don't absorb the click since this is over the input
+
+					border-bottom: 1px solid var(--card-border);
+					overflow: visible;
+					transition: transform 0.3s ease;
+				}
+
+				label::after {
+					// underline for the input
+					width: 100%;
+					height: 100%;
+
+					position: absolute;
+
+					border-bottom: 3px solid var(--color-selected);
+					z-index: 99;
+					transform: translateX(-100%);
+
+					content: ''; // needed for ::after
+				}
+
+				.label-content {
+					position: absolute;
+					bottom: 0px;
+					transition: transform 0.3s ease;
+				}
+			}
+
+			.listOfJumpers {
+				height: 82%; // TODO: this is horrible
+				padding: 0.8rem;
+
+				display: flex;
+				flex-direction: column;
+				overflow-y: scroll;
+				align-items: center;
+			}
+
+			.jumper {
+				// each jumper item
+				width: 90%;
+				min-height: 5vh;
+				max-height: 5rem;
+
+				margin-bottom: 1rem;
+				padding: 0.5rem;
+
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+
+				align-items: center;
+			}
+
+			.hide {
+				display: none;
+			}
+		}
+		.loadContainer {
+			width: 100vw;
+		}
+	}
+	@media (max-width: 650px) {
+		// less than 650px
+		.loadContainer {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+}
+.hide {
+	display: none; // TODO: fix this dumb thing - currently it's hiding IDs
 }

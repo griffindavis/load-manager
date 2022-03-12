@@ -28,145 +28,11 @@ body {
 }
 
 .jumperListSection {
-  height: 100vh;
-  width: 25vw;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-}
-
-.jumperListSection h1,
-.jumperListSection p {
-  text-align: center;
-}
-
-.jumperListSection .jumperListInputContainer {
-  position: relative;
-  overflow: visible;
-}
-
-.jumperListSection .jumperListInputContainer .margin {
-  margin-right: 5px;
-}
-
-.jumperListSection .jumperListInputContainer input {
-  width: 70%;
-  height: 100%;
-  border: none;
-  outline: none;
-  position: relative;
-  font-size: 1.1rem;
-}
-
-.jumperListSection .jumperListInputContainer input:focus + .label-name .label-content,
-.jumperListSection .jumperListInputContainer input:valid + .label-name .label-content {
-  -webkit-transform: translateY(-150%);
-          transform: translateY(-150%);
-  -webkit-transition: -webkit-transform 0.3s ease;
-  transition: -webkit-transform 0.3s ease;
-  transition: transform 0.3s ease;
-  transition: transform 0.3s ease, -webkit-transform 0.3s ease;
-}
-
-.jumperListSection .jumperListInputContainer input:focus + .label-name::after,
-.jumperListSection .jumperListInputContainer input:valid + .label-name::after {
-  -webkit-transform: translateX(0%);
-          transform: translateX(0%);
-  -webkit-transition: -webkit-transform 0.3s ease;
-  transition: -webkit-transform 0.3s ease;
-  transition: transform 0.3s ease;
-  transition: transform 0.3s ease, -webkit-transform 0.3s ease;
-}
-
-.jumperListSection .jumperListInputContainer label {
-  width: 70%;
-  height: 100%;
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
-  pointer-events: none;
-  border-bottom: 1px solid var(--card-border);
-  overflow: visible;
-  -webkit-transition: -webkit-transform 0.3s ease;
-  transition: -webkit-transform 0.3s ease;
-  transition: transform 0.3s ease;
-  transition: transform 0.3s ease, -webkit-transform 0.3s ease;
-}
-
-.jumperListSection .jumperListInputContainer label::after {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  border-bottom: 3px solid var(--color-selected);
-  z-index: 99;
-  -webkit-transform: translateX(-100%);
-          transform: translateX(-100%);
-  content: '';
-}
-
-.jumperListSection .jumperListInputContainer .label-content {
-  position: absolute;
-  bottom: 0px;
-  -webkit-transition: -webkit-transform 0.3s ease;
-  transition: -webkit-transform 0.3s ease;
-  transition: transform 0.3s ease;
-  transition: transform 0.3s ease, -webkit-transform 0.3s ease;
-}
-
-.jumperListSection .listOfJumpers {
-  height: 82%;
-  padding: 10px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  overflow-y: scroll;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.jumperListSection .jumper {
-  width: 20vw;
-  min-height: 5vh;
-  max-height: 200px;
-  margin-bottom: 8px;
-  padding: 5px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.jumper.hide {
-  display: none;
-}
-
-.hide {
   display: none;
 }
 
 .loadContainer {
-  width: 75vw;
+  width: 100vw;
   height: 100vh;
   display: -ms-grid;
   display: grid;
@@ -177,9 +43,9 @@ body {
   overflow-y: scroll;
 }
 
-.loadContainer .load {
-  height: calc(95vh / 2);
-  width: calc((75vw / 4.5));
+.load {
+  height: 90%;
+  width: 90%;
   -ms-flex-item-align: center;
       -ms-grid-row-align: center;
       align-self: center;
@@ -187,14 +53,14 @@ body {
       justify-self: center;
 }
 
-.loadContainer .load .loadId {
-  height: 55px;
-  width: 55px;
+.load .loadId {
+  height: 4rem;
+  width: 4rem;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  margin-top: 8px;
-  margin-left: 8px;
+  margin-top: 0.5rem;
+  margin-left: 0.5rem;
   border-radius: 50%;
   -webkit-box-align: center;
       -ms-flex-align: center;
@@ -213,35 +79,33 @@ body {
           filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
 
-.loadContainer .load .jumperList {
+.load .jumperList {
   margin: 5%;
 }
 
-.loadContainer .load .loadHeader {
+.load .loadHeader {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   padding-bottom: 5%;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
 }
 
-.loadContainer .load .deleteLoad {
+.load .deleteLoad {
+  margin-top: 0.5rem;
   padding-right: 5%;
   font-weight: bold;
   font-size: 1.5rem;
   color: var(--card-border);
 }
 
-.loadContainer .load .deleteLoad:hover {
+.load .deleteLoad:hover {
   cursor: pointer;
 }
 
-.loadContainer .load ul {
+.load ul {
   height: 75%;
   width: 100%;
   display: -webkit-box;
@@ -251,19 +115,19 @@ body {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  margin-top: 10px;
+  margin-top: 0.5rem;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
 }
 
-.loadContainer .load .jumper {
+.load .jumper {
   width: 95%;
-  height: 30px;
+  min-height: 2.5rem;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  margin-bottom: 8px;
+  margin-bottom: 0.5rem;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
@@ -520,5 +384,143 @@ body {
 #jumper-zero-state {
   width: 20vw;
   text-align: center;
+}
+
+@media screen and (min-width: 800px) {
+  .jumperListSection {
+    height: 100vh;
+    width: 25vw;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+  .jumperListSection h1,
+  .jumperListSection p {
+    text-align: center;
+  }
+  .jumperListSection .jumperListInputContainer {
+    position: relative;
+    overflow: visible;
+  }
+  .jumperListSection .jumperListInputContainer .margin {
+    margin-right: 5px;
+  }
+  .jumperListSection .jumperListInputContainer input {
+    width: 70%;
+    height: 100%;
+    border: none;
+    outline: none;
+    position: relative;
+    font-size: 1.1rem;
+  }
+  .jumperListSection .jumperListInputContainer input:focus + .label-name .label-content,
+  .jumperListSection .jumperListInputContainer input:valid + .label-name .label-content {
+    -webkit-transform: translateY(-150%);
+            transform: translateY(-150%);
+    -webkit-transition: -webkit-transform 0.3s ease;
+    transition: -webkit-transform 0.3s ease;
+    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, -webkit-transform 0.3s ease;
+  }
+  .jumperListSection .jumperListInputContainer input:focus + .label-name::after,
+  .jumperListSection .jumperListInputContainer input:valid + .label-name::after {
+    -webkit-transform: translateX(0%);
+            transform: translateX(0%);
+    -webkit-transition: -webkit-transform 0.3s ease;
+    transition: -webkit-transform 0.3s ease;
+    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, -webkit-transform 0.3s ease;
+  }
+  .jumperListSection .jumperListInputContainer label {
+    width: 70%;
+    height: 100%;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    pointer-events: none;
+    border-bottom: 1px solid var(--card-border);
+    overflow: visible;
+    -webkit-transition: -webkit-transform 0.3s ease;
+    transition: -webkit-transform 0.3s ease;
+    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, -webkit-transform 0.3s ease;
+  }
+  .jumperListSection .jumperListInputContainer label::after {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    border-bottom: 3px solid var(--color-selected);
+    z-index: 99;
+    -webkit-transform: translateX(-100%);
+            transform: translateX(-100%);
+    content: '';
+  }
+  .jumperListSection .jumperListInputContainer .label-content {
+    position: absolute;
+    bottom: 0px;
+    -webkit-transition: -webkit-transform 0.3s ease;
+    transition: -webkit-transform 0.3s ease;
+    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, -webkit-transform 0.3s ease;
+  }
+  .jumperListSection .listOfJumpers {
+    height: 82%;
+    padding: 0.8rem;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    overflow-y: scroll;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+  }
+  .jumperListSection .jumper {
+    width: 90%;
+    min-height: 5vh;
+    max-height: 5rem;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+  }
+  .jumperListSection .hide {
+    display: none;
+  }
+  .loadContainer {
+    width: 100vw;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .loadContainer {
+    -ms-grid-columns: (1fr)[3];
+        grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.hide {
+  display: none;
 }
 /*# sourceMappingURL=styles.css.map */
