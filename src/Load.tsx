@@ -99,7 +99,12 @@ function Load(
 		>
 			<div className="loadHeader">
 				<div className="loadId">{props.number?.toString()}</div>
-				<div className="deleteLoad" onClick={handleLoadDelete}>
+				<div
+					className="deleteLoad"
+					/* TODO: filter out users that shouldnt' be able to delete the load*/ onClick={
+						handleLoadDelete
+					}
+				>
 					X
 				</div>
 			</div>
@@ -110,6 +115,7 @@ function Load(
 						? ''
 						: jumperList.map((jumper) => {
 								// TODO: create a new component
+								//TODO: filter who which jumpers can be canceled
 								return (
 									<span className="jumper card" key={jumper.id}>
 										<div className="hide">{jumper.id}</div>
@@ -120,6 +126,7 @@ function Load(
 									</span>
 								);
 						  })}
+					<li className="addMe jumper card">Add Me</li>
 				</ul>
 			</div>
 		</div>

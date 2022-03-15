@@ -22,22 +22,44 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.App {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.navigation {
+	background: var(--color-selected);
+	width: 100%;
+	height: 5vh;
+
+	padding-left: 1rem;
+	padding-right: 1rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	font-size: 3rem;
+}
+
 .card {
 	border: 1px solid var(--card-border);
 	border-radius: 10px;
 	background-color: var(--card-background);
 	filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 }
+
 .jumperListSection {
+	// start off with the small layout and don't display this
 	display: none;
 }
+
 .loadContainer {
-	width: 100vw;
-	height: 100vh;
+	width: 100vw; //TODO: add spacing for nav header and footer
+	height: 90vh;
 
 	display: grid;
-	grid-template-columns: repeat(4, 1fr);
-	grid-auto-flow: row;
 	grid-auto-rows: 50%;
 
 	overflow-y: scroll;
@@ -48,6 +70,7 @@ body {
 	align-self: center;
 	justify-self: center;
 
+	// this should all be the same across platforms
 	.loadId {
 		height: 4rem;
 		width: 4rem;
@@ -70,17 +93,6 @@ body {
 		filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 	}
 
-	.jumperList {
-		margin: 5%;
-	}
-
-	.loadHeader {
-		display: flex;
-		padding-bottom: 5%;
-
-		justify-content: space-between;
-	}
-
 	.deleteLoad {
 		margin-top: 0.5rem;
 		padding-right: 5%;
@@ -94,6 +106,20 @@ body {
 		cursor: pointer;
 	}
 
+	//TODO: Add the add jumper button
+
+	.jumperList {
+		// adds some spacing in the card
+		margin: 5%;
+	}
+
+	.loadHeader {
+		display: flex;
+		padding-bottom: 5%; // makes sure the shadow isn't cut off
+
+		justify-content: space-between; // keeps the buttons in the header on either side of the card
+	}
+
 	ul {
 		// list of jumpers
 		height: 75%;
@@ -104,6 +130,18 @@ body {
 
 		margin-top: 0.5rem;
 		align-items: center;
+
+		.addMe {
+			align-items: center;
+			justify-content: center;
+
+			color: #cecece;
+			font-weight: bold;
+			font-size: 1rem;
+			border-radius: 1rem;
+			border: 3px dashed var(--card-border);
+			filter: none;
+		}
 	}
 
 	.jumper {
@@ -280,6 +318,7 @@ body {
 	width: 20vw; // TODO: this likely should be done better
 	text-align: center;
 }
+
 @media screen {
 	@media (min-width: 800px) {
 		// less than 800px
@@ -407,7 +446,7 @@ body {
 	@media (max-width: 650px) {
 		// less than 650px
 		.loadContainer {
-			grid-template-columns: repeat(3, 1fr);
+			//grid-template-columns: repeat(3, 1fr);
 		}
 	}
 }
