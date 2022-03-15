@@ -322,6 +322,13 @@ body {
 @media screen {
 	@media (min-width: 800px) {
 		// less than 800px
+		.App {
+			flex-direction: row;
+		}
+		.navigation {
+			display: none;
+		}
+
 		.jumperListSection {
 			height: 100vh;
 			width: 25vw; // jumper list takes up a quarter of the space
@@ -441,12 +448,7 @@ body {
 		}
 		.loadContainer {
 			width: 100vw;
-		}
-	}
-	@media (max-width: 650px) {
-		// less than 650px
-		.loadContainer {
-			//grid-template-columns: repeat(3, 1fr);
+			grid-template-columns: repeat(4, 1fr);
 		}
 	}
 }
