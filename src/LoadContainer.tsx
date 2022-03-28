@@ -1,31 +1,29 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import Load from './Load';
 import { v4 as uuidv4 } from 'uuid';
-import IJumperObject from './IJumperObject';
+import ILoadObject from './ILoadObject';
 
-interface ILoadObject {
-	id: string;
-	number: number;
-	jumperList: IJumperObject[];
-}
-
-function LoadContainer() {
-	const [loadList, setLoadList] = useState<ILoadObject[]>([]);
-	const LOCAL_STORAGE_KEY = 'loadList';
+function LoadContainer(props: {
+	loadList: ILoadObject[];
+	setLoadList: React.Dispatch<React.SetStateAction<ILoadObject[]>>;
+}) {
+	//const [loadList, setLoadList] = useState<ILoadObject[]>([]);
+	//const LOCAL_STORAGE_KEY = 'loadList';
 	const scrollToRef = useRef<HTMLDivElement>(null);
 
 	const draggingLoadId = useRef('');
 	const draggingLoadNumber = useRef(0);
+	const { loadList, setLoadList } = props;
 
-	useEffect(() => {
-		const storedJSON: string = localStorage.getItem(LOCAL_STORAGE_KEY) || '';
-		if (storedJSON === '') return;
-		setLoadList(JSON.parse(storedJSON));
-	}, []);
+	// useEffect(() => {
+	// 	const storedJSON: string = localStorage.getItem(LOCAL_STORAGE_KEY) || '';
+	// 	if (storedJSON === '') return;
+	// 	setLoadList(JSON.parse(storedJSON));
+	// }, []);
 
-	useEffect(() => {
-		localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(loadList));
-	}, [loadList]);
+	// useEffect(() => {
+	// 	localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(loadList));
+	// }, [loadList]);
 
 	var setDraggingLoad = (loadId: string, num: number) => {
 		draggingLoadId.current = loadId;

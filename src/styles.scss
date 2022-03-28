@@ -64,6 +64,20 @@ body {
 
 	overflow-y: scroll;
 }
+
+.shield {
+	display: none;
+
+	height: 90vh;
+	width: 100vw;
+	position: absolute;
+	background-color: #c4c4c4;
+	opacity: 0.7;
+}
+.raised {
+	display: block;
+}
+
 .load {
 	height: 90%;
 	width: 90%;
@@ -454,4 +468,7 @@ body {
 }
 .hide {
 	display: none; // TODO: fix this dumb thing - currently it's hiding IDs
+}
+.checkedIn {
+	color: #42ff00;
 }
