@@ -22,7 +22,8 @@ function FooterNavBar(props: {
 		setLoadFilter,
 		shieldRaised,
 		setShieldRaised,
-	} = props;
+	} = props; // destructure props
+
 	const shield = document.getElementById('shield');
 
 	const [transactionSelected, setTransactionSelected] = useState(false);
@@ -41,6 +42,7 @@ function FooterNavBar(props: {
 				},
 			];
 		});
+		// need to give it time to render
 		setTimeout(() => {
 			const loads = Array.from(document.getElementsByClassName('load card'));
 			loads[loadList.length - 1]?.scrollIntoView({
@@ -95,8 +97,13 @@ function FooterNavBar(props: {
 		}
 	}
 
+	/**
+	 * Function to filter the loads to only this user's
+	 * @param userId - the ID of the logged in user
+	 */
 	function getMyLoads(userId: string) {
 		const myLoads: number[] = [];
+
 		loadList.forEach((load) => {
 			load.jumperList.forEach((jumper) => {
 				if (jumper.id === userId) {
@@ -104,6 +111,7 @@ function FooterNavBar(props: {
 				}
 			});
 		});
+
 		setLoadFilter(myLoads);
 	}
 

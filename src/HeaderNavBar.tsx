@@ -10,11 +10,15 @@ function HeaderNavBar(props: {
 	shieldRaised: boolean;
 	setShieldRaised: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-	const { shieldRaised, setShieldRaised } = props;
-	const shield = document.getElementById('shield');
+	const { shieldRaised, setShieldRaised } = props; // destructure props
+	const shield = document.getElementById('shield'); // keep a ref to shield
 
+	// maintain state of the option selected
 	const [optionSelected, setOptionSelected] = useState<options | undefined>();
 
+	/**
+	 * Function to toggle the notifications button
+	 */
 	function handleToggleNotifications() {
 		toggleShield();
 		setOptionSelected(
@@ -22,16 +26,25 @@ function HeaderNavBar(props: {
 		);
 	}
 
+	/**
+	 * Function to toggle the user info button
+	 */
 	function handleToggleUserInfo() {
 		toggleShield();
 		setOptionSelected(optionSelected === undefined ? options.user : undefined);
 	}
 
+	/**
+	 * Function to toggle the menu button
+	 */
 	function handleToggleMenu() {
 		toggleShield();
 		setOptionSelected(optionSelected === undefined ? options.menu : undefined);
 	}
 
+	/**
+	 * Helper to raise and lower the shield
+	 */
 	function toggleShield() {
 		if (shieldRaised) {
 			shield?.classList.remove('raised');
@@ -41,6 +54,7 @@ function HeaderNavBar(props: {
 			setShieldRaised(true);
 		}
 	}
+
 	return (
 		<nav className="header navigation">
 			<span

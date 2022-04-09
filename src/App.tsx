@@ -33,12 +33,14 @@ function App() {
 	const [loadFilter, setLoadFilter] = useState<number[]>([]);
 	const [shieldRaised, setShieldRaised] = useState(false);
 
+	// get the initial stored load list
 	useEffect(() => {
 		const storedJSON: string = localStorage.getItem(LOCAL_STORAGE_KEY) || '';
 		if (storedJSON === '') return;
 		setLoadList(JSON.parse(storedJSON));
 	}, []);
 
+	// update the stored load list whenever it is changed
 	useEffect(() => {
 		localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(loadList));
 	}, [loadList]);
