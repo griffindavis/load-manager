@@ -6,6 +6,7 @@ import ILoadObject from './ILoadObject';
 function LoadContainer(props: {
 	loadList: ILoadObject[];
 	setLoadList: React.Dispatch<React.SetStateAction<ILoadObject[]>>;
+	loadFilter: number[];
 }) {
 	//const [loadList, setLoadList] = useState<ILoadObject[]>([]);
 	//const LOCAL_STORAGE_KEY = 'loadList';
@@ -13,7 +14,7 @@ function LoadContainer(props: {
 
 	const draggingLoadId = useRef('');
 	const draggingLoadNumber = useRef(0);
-	const { loadList, setLoadList } = props;
+	const { loadList, setLoadList, loadFilter } = props;
 
 	// useEffect(() => {
 	// 	const storedJSON: string = localStorage.getItem(LOCAL_STORAGE_KEY) || '';
@@ -171,6 +172,9 @@ function LoadContainer(props: {
 				onDrop={handleOnDrop}
 			>
 				{loadList.map((load) => {
+					if (loadFilter.length > 0 && !loadFilter.includes(load.number)) {
+						return null;
+					}
 					return (
 						<Load
 							id={load.id}

@@ -10,10 +10,8 @@ import IUserInfo from './IUserInfo';
 import Shield from './Shield';
 
 function App() {
-	// TODO: Maintian load state at this level
 	// TODO: Maintiain jumper state at this level
 
-	// TODO: Add load button
 	// TODO: Filter loads
 
 	// TODO: Add a button to add jumpers -- this will also need a popup
@@ -23,12 +21,17 @@ function App() {
 	// TODO: Transactions page
 
 	/* User Info */
-	const [userInfo, setUserInfo] = useState<IUserInfo>({ isCheckedIn: false });
+	const [userInfo, setUserInfo] = useState<IUserInfo>({
+		id: '5bb38709-8799-4b22-b561-6ee7d9a8d58a',
+		isCheckedIn: false,
+	});
 	/* End user info */
 
 	/* Maintain load state at the app level */
 	const [loadList, setLoadList] = useState<ILoadObject[]>([]);
 	const LOCAL_STORAGE_KEY = 'loadList';
+	const [loadFilter, setLoadFilter] = useState<number[]>([]);
+	const [shieldRaised, setShieldRaised] = useState(false);
 
 	useEffect(() => {
 		const storedJSON: string = localStorage.getItem(LOCAL_STORAGE_KEY) || '';
@@ -47,8 +50,15 @@ function App() {
 				<script src="https://kit.fontawesome.com/4ae8208dc5.js"></script>
 			</Helmet>
 
-			<HeaderNavBar />
-			<LoadContainer loadList={loadList} setLoadList={setLoadList} />
+			<HeaderNavBar
+				shieldRaised={shieldRaised}
+				setShieldRaised={setShieldRaised}
+			/>
+			<LoadContainer
+				loadList={loadList}
+				setLoadList={setLoadList}
+				loadFilter={loadFilter}
+			/>
 			<Shield />
 			<JumperList />
 			<FooterNavBar
@@ -56,6 +66,10 @@ function App() {
 				setLoadList={setLoadList}
 				userInfo={userInfo}
 				setUserInfo={setUserInfo}
+				loadFilter={loadFilter}
+				setLoadFilter={setLoadFilter}
+				shieldRaised={shieldRaised}
+				setShieldRaised={setShieldRaised}
 			/>
 		</div>
 	);

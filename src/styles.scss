@@ -3,6 +3,7 @@
 	--card-background: #ffffff;
 	--card-border: #e5e5e5;
 	--color-selected: #9289ff;
+	--color-selected-compliment: #ff8c92;
 }
 
 * {
@@ -230,6 +231,9 @@ body {
 	color: var(--color-selected);
 }
 
+.faImage.selected.compliment {
+	color: var(--color-selected-compliment);
+}
 .details {
 	// jumper detail dropdown
 	width: 20vw; //TODO: section this off better
@@ -470,5 +474,5 @@ body {
 	display: none; // TODO: fix this dumb thing - currently it's hiding IDs
 }
 .checkedIn {
-	color: #42ff00;
+	color: #92ff7a; //#42ff00;
 }

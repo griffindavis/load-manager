@@ -1,16 +1,31 @@
 import ILoadObject from './ILoadObject';
 import { v4 as uuidv4 } from 'uuid';
 import IUserInfo from './IUserInfo';
+import { useState } from 'react';
 
 function FooterNavBar(props: {
 	loadList: ILoadObject[];
 	setLoadList: React.Dispatch<React.SetStateAction<ILoadObject[]>>;
 	userInfo: IUserInfo;
 	setUserInfo: React.Dispatch<React.SetStateAction<IUserInfo>>;
+	loadFilter: number[];
+	setLoadFilter: React.Dispatch<React.SetStateAction<number[]>>;
+	shieldRaised: boolean;
+	setShieldRaised: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-	const { loadList, setLoadList, userInfo, setUserInfo } = props;
+	const {
+		loadList,
+		setLoadList,
+		userInfo,
+		setUserInfo,
+		loadFilter,
+		setLoadFilter,
+		shieldRaised,
+		setShieldRaised,
+	} = props;
 	const shield = document.getElementById('shield');
-	let shieldRaised = false;
+
+	const [transactionSelected, setTransactionSelected] = useState(false);
 
 	/**
 	 * Function to handle clicking the add new load button on the mobile view
@@ -51,12 +66,20 @@ function FooterNavBar(props: {
 	 * Handles displaying and hiding the user's transaction data
 	 */
 	function handleTransactions() {
+		toggleShield();
+		setTransactionSelected(!transactionSelected);
+	}
+
+	/**
+	 * Function to raise and drop the shield appropriately
+	 */
+	function toggleShield() {
 		if (shieldRaised) {
 			shield?.classList.remove('raised');
-			shieldRaised = false;
+			setShieldRaised(false);
 		} else {
 			shield?.classList.add('raised');
-			shieldRaised = true;
+			setShieldRaised(true);
 		}
 	}
 
@@ -65,6 +88,11 @@ function FooterNavBar(props: {
 	 */
 	function handleMyLoads() {
 		// probably want to hide all loads without this user
+		if (loadFilter.length > 0) {
+			setLoadFilter([]);
+		} else {
+			getMyLoads(userInfo.id);
+		}
 	}
 
 	function getMyLoads(userId: string) {
@@ -76,9 +104,8 @@ function FooterNavBar(props: {
 				}
 			});
 		});
-		console.log(myLoads);
+		setLoadFilter(myLoads);
 	}
-	getMyLoads('5bb38709-8799-4b22-b561-6ee7d9a8d58a');
 
 	return (
 		<nav className="footer navigation">
@@ -89,11 +116,15 @@ function FooterNavBar(props: {
 				onClick={toggleCheckedIn}
 			></span>
 			<span
-				className="myTransactions fas faImage fa-dollar-sign fa-xs"
+				className={`myTransactions fas faImage fa-dollar-sign fa-xs ${
+					transactionSelected ? 'selected compliment' : ''
+				}`}
 				onClick={handleTransactions}
 			></span>
 			<span
-				className="myLoads fas faImage fa-plane fa-xs"
+				className={`myLoads fas faImage fa-plane fa-xs ${
+					loadFilter.length > 0 ? 'selected compliment' : ''
+				}`}
 				onClick={handleMyLoads}
 			></span>
 			<span
