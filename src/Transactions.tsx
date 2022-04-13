@@ -10,7 +10,7 @@ function Transactions(props: {
 
 	return (
 		<section className="transactions">
-			<div className="card">{`Total: $${calculateTotal(loadList)}`}</div>
+			<div className="card total">{`Total: $${calculateTotal(loadList)}`}</div>
 			{loadList.map((load) => (
 				<div className="card">{`Load ${load.number}: $${getPrice(load)}`}</div>
 			))}

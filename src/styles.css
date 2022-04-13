@@ -633,4 +633,8 @@ body {
       -ms-flex-align: center;
           align-items: center;
 }
+
+.transactions .total {
+  font-weight: bold;
+}
 /*# sourceMappingURL=styles.css.map */

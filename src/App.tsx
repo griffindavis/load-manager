@@ -10,6 +10,7 @@ import IUserInfo from './IUserInfo';
 import Shield from './Shield';
 import { ViewOptions } from './ViewOptions';
 import Transactions from './Transactions';
+import IJumperObject from './IJumperObject';
 
 function App() {
 	// TODO: Maintiain jumper state at this level
@@ -64,6 +65,13 @@ function App() {
 			setMyLoadsFilter(userInfo);
 		}
 	}
+
+	function getUpdatedJumperList(loadId: string): IJumperObject[] {
+		const LOCAL_STORAGE_KEY = 'load' + loadId + '.jumperList';
+		const storedJSON: string = localStorage.getItem(LOCAL_STORAGE_KEY) || '';
+		return JSON.parse(storedJSON);
+	}
+
 	/**
 	 * Function to filter the loads to only this user's
 	 * @param userId - the ID of the logged in user
@@ -72,11 +80,14 @@ function App() {
 		const myLoads: number[] = [];
 
 		loadList.forEach((load) => {
-			load.jumperList.forEach((jumper) => {
-				if (jumper.id === userId) {
-					myLoads.push(load.number);
-				}
-			});
+			const jumperList = getUpdatedJumperList(load.id);
+			if (JumperList.length > 0) {
+				jumperList.forEach((jumper) => {
+					if (jumper.id === userId) {
+						myLoads.push(load.number);
+					}
+				});
+			}
 		});
 		return myLoads;
 	}
@@ -85,11 +96,14 @@ function App() {
 		const myLoads: ILoadObject[] = [];
 
 		loadList.forEach((load) => {
-			load.jumperList.forEach((jumper) => {
-				if (jumper.id === userId) {
-					myLoads.push(load);
-				}
-			});
+			const jumperList = getUpdatedJumperList(load.id);
+			if (jumperList.length > 0) {
+				jumperList.forEach((jumper) => {
+					if (jumper.id === userId) {
+						myLoads.push(load);
+					}
+				});
+			}
 		});
 		return myLoads;
 	}
