@@ -69,6 +69,7 @@ function App() {
 	function getUpdatedJumperList(loadId: string): IJumperObject[] {
 		const LOCAL_STORAGE_KEY = 'load' + loadId + '.jumperList';
 		const storedJSON: string = localStorage.getItem(LOCAL_STORAGE_KEY) || '';
+		if (storedJSON === '') return [];
 		return JSON.parse(storedJSON);
 	}
 
@@ -81,7 +82,7 @@ function App() {
 
 		loadList.forEach((load) => {
 			const jumperList = getUpdatedJumperList(load.id);
-			if (JumperList.length > 0) {
+			if (jumperList.length > 0) {
 				jumperList.forEach((jumper) => {
 					if (jumper.id === userId) {
 						myLoads.push(load.number);
