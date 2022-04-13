@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet';
 import HeaderNavBar from './HeaderNavBar';
 import FooterNavBar from './FooterNavBar';
 import { useEffect, useState } from 'react';
-import ILoadObject from './ILoadObject';
+import { ILoadObjectStorable } from './ILoadObject';
 import IUserInfo from './IUserInfo';
 import Shield from './Shield';
 import { ViewOptions } from './ViewOptions';
@@ -13,10 +13,6 @@ import Transactions from './Transactions';
 import IJumperObject from './IJumperObject';
 
 function App() {
-	// TODO: Maintiain jumper state at this level
-
-	// TODO: Filter loads
-
 	// TODO: Add a button to add jumpers -- this will also need a popup
 
 	// TODO: Menu page
@@ -66,6 +62,11 @@ function App() {
 		}
 	}
 
+	/**
+	 * Gets the up-to-date list of jumpers for a load
+	 * @param loadId - the ID of the load to get jumpers from
+	 * @returns an array of jumpers
+	 */
 	function getUpdatedJumperList(loadId: string): IJumperObject[] {
 		const LOCAL_STORAGE_KEY = 'load' + loadId + '.jumperList';
 		const storedJSON: string = localStorage.getItem(LOCAL_STORAGE_KEY) || '';
@@ -93,8 +94,13 @@ function App() {
 		return myLoads;
 	}
 
-	function getMyLoadDetails(userId: string): ILoadObject[] {
-		const myLoads: ILoadObject[] = [];
+	/**
+	 * Get's the load objects for loads that this user is on
+	 * @param userId - the user ID that is logged in
+	 * @returns an array of loads
+	 */
+	function getMyLoadDetails(userId: string): ILoadObjectStorable[] {
+		const myLoads: ILoadObjectStorable[] = [];
 
 		loadList.forEach((load) => {
 			const jumperList = getUpdatedJumperList(load.id);
@@ -125,7 +131,7 @@ function App() {
 	/* End View State */
 
 	/* Maintain load state at the app level */
-	const [loadList, setLoadList] = useState<ILoadObject[]>([]);
+	const [loadList, setLoadList] = useState<ILoadObjectStorable[]>([]);
 	const LOCAL_STORAGE_KEY = 'loadList';
 	const [loadFilter, setLoadFilter] = useState<number[]>([]);
 	const [shieldRaised, setShieldRaised] = useState(false);

@@ -17,6 +17,7 @@ function Load(
 	const [jumperList, setJumpers] = useState<IJumperObject[]>([]);
 	const LOCAL_STORAGE_KEY = 'load' + props.id + '.jumperList';
 	const userInfo = props.userInfo;
+
 	useEffect(() => {
 		const storedJSON: string = localStorage.getItem(LOCAL_STORAGE_KEY) || '';
 		if (storedJSON.length === 0) {
@@ -31,6 +32,10 @@ function Load(
 		localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(jumperList));
 	}, [jumperList]);
 
+	/**
+	 * Handles the logic for removing a jumper from a load
+	 * @param e the event
+	 */
 	function handleCancel(e: BaseSyntheticEvent) {
 		const id = e.target.offsetParent.firstChild.innerText;
 		// do this better with html dataset
@@ -41,6 +46,11 @@ function Load(
 		);
 	}
 
+	/**
+	 * Determines whether the jumper provided is on the load
+	 * @param id - the jumper ID to find
+	 * @returns true or false
+	 */
 	function loadContainsJumper(id: string) {
 		return (
 			jumperList.filter((entry) => {
@@ -49,6 +59,10 @@ function Load(
 		);
 	}
 
+	/**
+	 * Handles dropping a jumper on a load card
+	 * @param event - the drag event
+	 */
 	function handleOnDrop(event: React.DragEvent<HTMLDivElement>) {
 		event.preventDefault();
 		document.querySelector('.dragging')?.classList?.remove('dragging');
@@ -72,6 +86,10 @@ function Load(
 		}
 	}
 
+	/**
+	 * Handles logic for dragging a jumper over a load card
+	 * @param event - the drag event
+	 */
 	function handleOnDragOver(event: React.DragEvent<HTMLDivElement>) {
 		event.preventDefault();
 		if (event.dataTransfer.types[0] !== 'text/jumper') {
@@ -80,16 +98,27 @@ function Load(
 		}
 	}
 
+	/**
+	 * Handles logic for deleting a load
+	 */
 	function handleLoadDelete() {
 		props.removeLoad(props.id);
 	}
 
+	/**
+	 * Handles logic for adding the logged in user to a load
+	 */
 	function handleAddMe() {
 		setJumpers((prevJumpers) => {
 			return [...prevJumpers, { id: userInfo.id, name: userInfo.name }];
 		});
 	}
 
+	/**
+	 * Determines whether this jumper is the user logged in
+	 * @param jumperId - the jumper id to find
+	 * @returns true or false
+	 */
 	function isJumperThisUser(jumperId: string) {
 		return jumperId === userInfo.id;
 	}
@@ -112,12 +141,7 @@ function Load(
 			<div className="loadHeader">
 				<div className="loadId">{props.number?.toString()}</div>
 				{userInfo.canRemoveLoads ? (
-					<div
-						className="deleteLoad"
-						/* TODO: filter out users that shouldnt' be able to delete the load*/ onClick={
-							handleLoadDelete
-						}
-					>
+					<div className="deleteLoad" onClick={handleLoadDelete}>
 						X
 					</div>
 				) : (
@@ -131,7 +155,6 @@ function Load(
 						? ''
 						: jumperList.map((jumper) => {
 								// TODO: create a new component
-								//TODO: filter who which jumpers can be canceled
 								return (
 									<span className="jumper card" key={jumper.id}>
 										<div className="hide">{jumper.id}</div>
