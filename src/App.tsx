@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet';
 import HeaderNavBar from './HeaderNavBar';
 import FooterNavBar from './FooterNavBar';
 import { useEffect, useState } from 'react';
-import { ILoadObjectStorable } from './ILoadObject';
+import ILoadObject from './ILoadObject';
 import IUserInfo from './IUserInfo';
 import Shield from './Shield';
 import { ViewOptions } from './ViewOptions';
@@ -99,8 +99,8 @@ function App() {
 	 * @param userId - the user ID that is logged in
 	 * @returns an array of loads
 	 */
-	function getMyLoadDetails(userId: string): ILoadObjectStorable[] {
-		const myLoads: ILoadObjectStorable[] = [];
+	function getMyLoadDetails(userId: string): ILoadObject[] {
+		const myLoads: ILoadObject[] = [];
 
 		loadList.forEach((load) => {
 			const jumperList = getUpdatedJumperList(load.id);
@@ -131,7 +131,7 @@ function App() {
 	/* End View State */
 
 	/* Maintain load state at the app level */
-	const [loadList, setLoadList] = useState<ILoadObjectStorable[]>([]);
+	const [loadList, setLoadList] = useState<ILoadObject[]>([]);
 	const LOCAL_STORAGE_KEY = 'loadList';
 	const [loadFilter, setLoadFilter] = useState<number[]>([]);
 	const [shieldRaised, setShieldRaised] = useState(false);
