@@ -90,6 +90,10 @@ function Load(
 		});
 	}
 
+	function isJumperThisUser(jumperId: string) {
+		return jumperId === userInfo.id;
+	}
+
 	return (
 		<div
 			className="load card"
@@ -128,9 +132,14 @@ function Load(
 									<span className="jumper card" key={jumper.id}>
 										<div className="hide">{jumper.id}</div>
 										<li>{jumper.name}</li>
-										<div className="cancel" onClick={handleCancel}>
-											X
-										</div>
+										{userInfo.canRemoveJumpers ||
+										isJumperThisUser(jumper.id) ? (
+											<div className="cancel" onClick={handleCancel}>
+												X
+											</div>
+										) : (
+											''
+										)}
 									</span>
 								);
 						  })}

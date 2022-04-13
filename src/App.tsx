@@ -82,10 +82,9 @@ function App() {
 
 	function getMyLoadDetails(userId: string): ILoadObject[] {
 		const myLoads: ILoadObject[] = [];
-		console.log(loadList);
+
 		loadList.forEach((load) => {
 			load.jumperList.forEach((jumper) => {
-				console.log(`Jumper: ${jumper.id}\nUser: ${userId}`);
 				if (jumper.id === userId) {
 					myLoads.push(load);
 				}
