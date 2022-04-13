@@ -2,11 +2,13 @@ import { useRef } from 'react';
 import Load from './Load';
 import { v4 as uuidv4 } from 'uuid';
 import ILoadObject, { LoadType } from './ILoadObject';
+import IUserInfo from './IUserInfo';
 
 function LoadContainer(props: {
 	loadList: ILoadObject[];
 	setLoadList: React.Dispatch<React.SetStateAction<ILoadObject[]>>;
 	loadFilter: number[];
+	userInfo: IUserInfo;
 }) {
 	//const [loadList, setLoadList] = useState<ILoadObject[]>([]);
 	//const LOCAL_STORAGE_KEY = 'loadList';
@@ -184,6 +186,7 @@ function LoadContainer(props: {
 							initialJumperList={load.jumperList}
 							removeLoad={removeLoad}
 							setDraggingLoad={setDraggingLoad}
+							userInfo={props.userInfo}
 						/>
 					);
 				})}

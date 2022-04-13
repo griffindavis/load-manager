@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { BaseSyntheticEvent, useEffect, useState } from 'react';
 import IJumperObject from './IJumperObject';
+import IUserInfo from './IUserInfo';
 
 function Load(
 	props: {
@@ -9,12 +10,13 @@ function Load(
 		initialJumperList: IJumperObject[];
 		removeLoad: (id: string) => void;
 		setDraggingLoad: (loadId: string, num: number) => void;
+		userInfo: IUserInfo;
 	},
 	key: string
 ) {
 	const [jumperList, setJumpers] = useState<IJumperObject[]>([]);
 	const LOCAL_STORAGE_KEY = 'load' + props.id + '.jumperList';
-
+	const userInfo = props.userInfo;
 	useEffect(() => {
 		const storedJSON: string = localStorage.getItem(LOCAL_STORAGE_KEY) || '';
 		if (storedJSON.length === 0) {
@@ -82,6 +84,12 @@ function Load(
 		props.removeLoad(props.id);
 	}
 
+	function handleAddMe() {
+		setJumpers((prevJumpers) => {
+			return [...prevJumpers, { id: userInfo.id, name: userInfo.name }];
+		});
+	}
+
 	return (
 		<div
 			className="load card"
@@ -126,7 +134,13 @@ function Load(
 									</span>
 								);
 						  })}
-					<li className="addMe jumper card">Add Me</li>
+					{loadContainsJumper(userInfo.id) ? (
+						''
+					) : (
+						<li className="addMe jumper card" onClick={handleAddMe}>
+							Add Me
+						</li>
+					)}
 				</ul>
 			</div>
 		</div>

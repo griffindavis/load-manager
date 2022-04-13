@@ -20,11 +20,11 @@ function App() {
 
 	// TODO: Menu page
 	// TODO: Notifications page
-	// TODO: Transactions page
 
 	/* User Info */
 	const [userInfo, setUserInfo] = useState<IUserInfo>({
 		id: '5bb38709-8799-4b22-b561-6ee7d9a8d58a',
+		name: 'Griffin',
 		isCheckedIn: false,
 	});
 	/* End user info */
@@ -82,9 +82,10 @@ function App() {
 
 	function getMyLoadDetails(userId: string): ILoadObject[] {
 		const myLoads: ILoadObject[] = [];
-
+		console.log(loadList);
 		loadList.forEach((load) => {
 			load.jumperList.forEach((jumper) => {
+				console.log(`Jumper: ${jumper.id}\nUser: ${userId}`);
 				if (jumper.id === userId) {
 					myLoads.push(load);
 				}
@@ -141,6 +142,7 @@ function App() {
 				loadList={loadList}
 				setLoadList={setLoadList}
 				loadFilter={loadFilter}
+				userInfo={userInfo}
 			/>
 			<Transactions
 				optionSelected={optionSelected}
