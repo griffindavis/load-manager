@@ -1,32 +1,25 @@
-import ILoadObject from './ILoadObject';
+import ILoadObject, { LoadType } from './ILoadObject';
 import { v4 as uuidv4 } from 'uuid';
 import IUserInfo from './IUserInfo';
-import { useState } from 'react';
+import { ViewOptions } from './ViewOptions';
 
 function FooterNavBar(props: {
 	loadList: ILoadObject[];
 	setLoadList: React.Dispatch<React.SetStateAction<ILoadObject[]>>;
 	userInfo: IUserInfo;
 	setUserInfo: React.Dispatch<React.SetStateAction<IUserInfo>>;
-	loadFilter: number[];
 	setLoadFilter: React.Dispatch<React.SetStateAction<number[]>>;
-	shieldRaised: boolean;
-	setShieldRaised: React.Dispatch<React.SetStateAction<boolean>>;
+	handleChangeViewOption: (option: ViewOptions) => void;
+	optionSelected: ViewOptions | undefined;
 }) {
 	const {
 		loadList,
 		setLoadList,
 		userInfo,
 		setUserInfo,
-		loadFilter,
-		setLoadFilter,
-		shieldRaised,
-		setShieldRaised,
+		handleChangeViewOption,
+		optionSelected,
 	} = props; // destructure props
-
-	const shield = document.getElementById('shield');
-
-	const [transactionSelected, setTransactionSelected] = useState(false);
 
 	/**
 	 * Function to handle clicking the add new load button on the mobile view
@@ -39,6 +32,7 @@ function FooterNavBar(props: {
 					id: uuidv4().toString(),
 					number: loadList.length + 1,
 					jumperList: [],
+					type: LoadType.high,
 				},
 			];
 		});
@@ -68,51 +62,14 @@ function FooterNavBar(props: {
 	 * Handles displaying and hiding the user's transaction data
 	 */
 	function handleTransactions() {
-		toggleShield();
-		setTransactionSelected(!transactionSelected);
-	}
-
-	/**
-	 * Function to raise and drop the shield appropriately
-	 */
-	function toggleShield() {
-		if (shieldRaised) {
-			shield?.classList.remove('raised');
-			setShieldRaised(false);
-		} else {
-			shield?.classList.add('raised');
-			setShieldRaised(true);
-		}
+		handleChangeViewOption(ViewOptions.transactions);
 	}
 
 	/**
 	 * Handles displaying and hiding the users loads
 	 */
 	function handleMyLoads() {
-		// probably want to hide all loads without this user
-		if (loadFilter.length > 0) {
-			setLoadFilter([]);
-		} else {
-			getMyLoads(userInfo.id);
-		}
-	}
-
-	/**
-	 * Function to filter the loads to only this user's
-	 * @param userId - the ID of the logged in user
-	 */
-	function getMyLoads(userId: string) {
-		const myLoads: number[] = [];
-
-		loadList.forEach((load) => {
-			load.jumperList.forEach((jumper) => {
-				if (jumper.id === userId) {
-					myLoads.push(load.number);
-				}
-			});
-		});
-
-		setLoadFilter(myLoads);
+		handleChangeViewOption(ViewOptions.myLoads);
 	}
 
 	return (
@@ -125,13 +82,15 @@ function FooterNavBar(props: {
 			></span>
 			<span
 				className={`myTransactions fas faImage fa-dollar-sign fa-xs ${
-					transactionSelected ? 'selected compliment' : ''
+					optionSelected === ViewOptions.transactions
+						? 'selected compliment'
+						: ''
 				}`}
 				onClick={handleTransactions}
 			></span>
 			<span
 				className={`myLoads fas faImage fa-plane fa-xs ${
-					loadFilter.length > 0 ? 'selected compliment' : ''
+					optionSelected === ViewOptions.myLoads ? 'selected compliment' : ''
 				}`}
 				onClick={handleMyLoads}
 			></span>

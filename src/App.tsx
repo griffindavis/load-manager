@@ -8,6 +8,8 @@ import { useEffect, useState } from 'react';
 import ILoadObject from './ILoadObject';
 import IUserInfo from './IUserInfo';
 import Shield from './Shield';
+import { ViewOptions } from './ViewOptions';
+import Transactions from './Transactions';
 
 function App() {
 	// TODO: Maintiain jumper state at this level
@@ -26,6 +28,85 @@ function App() {
 		isCheckedIn: false,
 	});
 	/* End user info */
+
+	/* View State */
+	const [optionSelected, setOptionSelected] = useState<
+		ViewOptions | undefined
+	>();
+
+	const shield = document.getElementById('shield'); // keep a ref to shield
+
+	/**
+	 * Helper to raise and lower the shield
+	 */
+	function toggleShield() {
+		if (shieldRaised) {
+			shield?.classList.remove('raised');
+			setShieldRaised(false);
+		} else {
+			shield?.classList.add('raised');
+			setShieldRaised(true);
+		}
+	}
+
+	/**
+	 * Handles switching the view options and raising / lowering the shield
+	 */
+	function handleChangeViewOption(option: ViewOptions) {
+		if (option !== ViewOptions.myLoads) {
+			toggleShield();
+		}
+
+		setOptionSelected(optionSelected === undefined ? option : undefined);
+
+		if (option === ViewOptions.myLoads) {
+			setMyLoadsFilter(userInfo);
+		}
+	}
+	/**
+	 * Function to filter the loads to only this user's
+	 * @param userId - the ID of the logged in user
+	 */
+	function getMyLoads(userId: string): number[] {
+		const myLoads: number[] = [];
+
+		loadList.forEach((load) => {
+			load.jumperList.forEach((jumper) => {
+				if (jumper.id === userId) {
+					myLoads.push(load.number);
+				}
+			});
+		});
+		return myLoads;
+	}
+
+	function getMyLoadDetails(userId: string): ILoadObject[] {
+		const myLoads: ILoadObject[] = [];
+
+		loadList.forEach((load) => {
+			load.jumperList.forEach((jumper) => {
+				if (jumper.id === userId) {
+					myLoads.push(load);
+				}
+			});
+		});
+		return myLoads;
+	}
+
+	/**
+	 * Function to set the my loads filter
+	 * @param userInfo - user's info
+	 */
+	function setMyLoadsFilter(userInfo: IUserInfo) {
+		if (loadFilter.length > 0) {
+			setLoadFilter([]);
+		} else {
+			const myLoads = getMyLoads(userInfo.id);
+			setLoadFilter(myLoads);
+		}
+	}
+
+	/* End View State */
 
 	/* Maintain load state at the app level */
 	const [loadList, setLoadList] = useState<ILoadObject[]>([]);
@@ -53,13 +134,17 @@ function App() {
 			</Helmet>
 
 			<HeaderNavBar
-				shieldRaised={shieldRaised}
-				setShieldRaised={setShieldRaised}
+				handleChangeViewOption={handleChangeViewOption}
+				optionSelected={optionSelected}
 			/>
 			<LoadContainer
 				loadList={loadList}
 				setLoadList={setLoadList}
 				loadFilter={loadFilter}
+			/>
+			<Transactions
+				optionSelected={optionSelected}
+				loadList={getMyLoadDetails(userInfo.id)}
 			/>
 			<Shield />
 			<JumperList />
@@ -68,10 +153,9 @@ function App() {
 				setLoadList={setLoadList}
 				userInfo={userInfo}
 				setUserInfo={setUserInfo}
-				loadFilter={loadFilter}
 				setLoadFilter={setLoadFilter}
-				shieldRaised={shieldRaised}
-				setShieldRaised={setShieldRaised}
+				handleChangeViewOption={handleChangeViewOption}
+				optionSelected={optionSelected}
 			/>
 		</div>
 	);

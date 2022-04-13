@@ -266,6 +266,9 @@ body {
 .faImage {
   font-size: 1.5rem;
   color: var(--card-border);
+  min-height: 2rem;
+  min-width: 2rem;
+  background-color: var(--card-border);
 }
 
 .faImage.selected {
@@ -595,5 +598,39 @@ body {
 
 .checkedIn {
   color: #92ff7a;
+}
+
+.transactions {
+  z-index: 100;
+  position: absolute;
+  min-width: 100vw;
+  top: 5vh;
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr;
+      grid-template-columns: 1fr;
+  overflow-y: scroll;
+  padding: 0.8rem;
+}
+
+.transactions .card {
+  min-width: 90%;
+  min-height: 7vh;
+  border-radius: 7rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 /*# sourceMappingURL=styles.css.map */

@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import Load from './Load';
 import { v4 as uuidv4 } from 'uuid';
-import ILoadObject from './ILoadObject';
+import ILoadObject, { LoadType } from './ILoadObject';
 
 function LoadContainer(props: {
 	loadList: ILoadObject[];
@@ -47,6 +47,7 @@ function LoadContainer(props: {
 							id: uuidv4().toString(),
 							number: loadList.length + 1,
 							jumperList: [{ id: newId, name: newName }],
+							type: LoadType.high,
 						},
 					];
 				});
