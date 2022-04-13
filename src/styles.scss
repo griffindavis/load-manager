@@ -484,22 +484,22 @@ body {
 	z-index: 100;
 	position: absolute;
 	min-width: 100vw;
+	min-height: 90vh;
 	top: 5vh;
 
-	display: grid;
-	grid-template-columns: 1fr;
+	display: flex;
+	flex-direction: column;
 	overflow-y: scroll;
 
 	padding: 0.8rem;
 
-	.card {
+	.item {
 		min-width: 90%;
 		min-height: 7vh;
 		border-radius: 7rem;
 
 		margin-bottom: 1rem;
 		padding: 0.5rem;
-
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
@@ -507,7 +507,21 @@ body {
 		align-items: center;
 	}
 
-	.total {
+	.card.total {
+		position: absolute;
+		display: flex;
+		bottom: 0.5rem;
+		right: 0.5rem;
+
 		font-weight: bold;
+
+		height: 4rem;
+		width: 4rem;
+
+		border-radius: 50%;
+
+		background-color: var(--card-background);
+		justify-content: center;
+		align-items: center;
 	}
 }
