@@ -26,6 +26,7 @@ function App() {
 		id: '5bb38709-8799-4b22-b561-6ee7d9a8d58a',
 		name: 'Griffin',
 		isCheckedIn: false,
+		canRemoveLoads: true,
 	});
 	/* End user info */
 

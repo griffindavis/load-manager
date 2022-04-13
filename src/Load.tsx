@@ -111,14 +111,18 @@ function Load(
 		>
 			<div className="loadHeader">
 				<div className="loadId">{props.number?.toString()}</div>
-				<div
-					className="deleteLoad"
-					/* TODO: filter out users that shouldnt' be able to delete the load*/ onClick={
-						handleLoadDelete
-					}
-				>
-					X
-				</div>
+				{userInfo.canRemoveLoads ? (
+					<div
+						className="deleteLoad"
+						/* TODO: filter out users that shouldnt' be able to delete the load*/ onClick={
+							handleLoadDelete
+						}
+					>
+						X
+					</div>
+				) : (
+					''
+				)}
 			</div>
 
 			<div className="jumperList">

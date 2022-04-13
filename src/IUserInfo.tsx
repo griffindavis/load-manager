@@ -3,4 +3,5 @@ export default interface IUserInfo {
 	name: string;
 	isCheckedIn: boolean;
 	canRemoveJumpers?: boolean;
+	canRemoveLoads?: boolean;
 }
