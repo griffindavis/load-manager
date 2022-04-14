@@ -227,7 +227,7 @@ body {
 	color: var(--card-border);
 	min-height: 2rem;
 	min-width: 2rem;
-	background-color: var(--card-border);
+	//background-color: var(--card-border);
 }
 
 .faImage.selected {
@@ -480,7 +480,8 @@ body {
 	color: #92ff7a; //#42ff00;
 }
 
-.transactions {
+.transactions,
+.menu-container {
 	z-index: 100;
 	position: absolute;
 	min-width: 100vw;

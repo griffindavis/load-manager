@@ -11,6 +11,7 @@ import Shield from './Shield';
 import { ViewOptions } from './ViewOptions';
 import Transactions from './Transactions';
 import IJumperObject from './IJumperObject';
+import Menu from './Menu';
 
 function App() {
 	// TODO: Add a button to add jumpers -- this will also need a popup
@@ -159,18 +160,22 @@ function App() {
 				handleChangeViewOption={handleChangeViewOption}
 				optionSelected={optionSelected}
 			/>
+
 			<LoadContainer
 				loadList={loadList}
 				setLoadList={setLoadList}
 				loadFilter={loadFilter}
 				userInfo={userInfo}
 			/>
+			<Shield />
 			<Transactions
 				optionSelected={optionSelected}
 				loadList={getMyLoadDetails(userInfo.id)}
 			/>
-			<Shield />
+			<Menu userInfo={userInfo} optionSelected={optionSelected} />
+
 			<JumperList />
+
 			<FooterNavBar
 				loadList={loadList}
 				setLoadList={setLoadList}

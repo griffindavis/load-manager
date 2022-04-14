@@ -5,7 +5,7 @@ function Transactions(props: {
 	optionSelected: ViewOptions | undefined;
 	loadList: ILoadObject[];
 }) {
-	if (props.optionSelected !== ViewOptions.transactions) return <div />;
+	if (props.optionSelected !== ViewOptions.transactions) return null;
 	const loadList = props.loadList;
 
 	return (
