@@ -46,6 +46,11 @@ function JumperList() {
 		// force a re-render of the list when we update the filters
 	}, [filters]);
 
+	/**
+	 * Handle adding a new jumper to the list
+	 * @param e - the js event
+	 * @returns
+	 */
 	function handleAddJumper(e: SyntheticEvent) {
 		let name: string = '';
 		if (jumperNameRef?.current?.value === null) {
@@ -64,11 +69,18 @@ function JumperList() {
 		}
 	}
 
+	/**
+	 * Handles clearing the local storage of all jumpers
+	 */
 	function handleClear() {
 		setJumpers([]);
 		localStorage.setItem(LOCAL_STORAGE_KEY, '');
 	}
 
+	/**
+	 * Handles removing the jumper from the stored jumper list
+	 * @param e - the js event
+	 */
 	function removeJumper(e: SyntheticEvent) {
 		const id = e.currentTarget.getAttribute('data-id');
 		setJumpers(
@@ -78,6 +90,10 @@ function JumperList() {
 		);
 	}
 
+	/**
+	 * Handles when the enter key was pressed
+	 * @param e - the js event
+	 */
 	function handleKeyDown(e: KeyboardEvent) {
 		// allow hitting enter to submit the new jumper
 		if (e.key === 'Enter') {

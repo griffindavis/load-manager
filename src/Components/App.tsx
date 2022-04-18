@@ -14,7 +14,7 @@ import IJumperObject from './IJumperObject';
 import Menu from './Menu';
 
 function App() {
-	//TODO: full reevaluation of the code
+	// TODO: full reevaluation of the code
 	// TODO: Add a button to add jumpers -- this will also need a popup
 	// TODO: Notifications page
 
@@ -33,6 +33,9 @@ function App() {
 	>();
 
 	const shield = document.getElementById('shield'); // keep a ref to shield
+	// TODO: useref?
+
+	/* End View State */
 
 	/**
 	 * Helper to raise and lower the shield
@@ -51,14 +54,12 @@ function App() {
 	 * Handles switching the view options and raising / lowering the shield
 	 */
 	function handleChangeViewOption(option: ViewOptions) {
-		if (option !== ViewOptions.myLoads) {
-			toggleShield();
-		}
-
 		setOptionSelected(optionSelected === undefined ? option : undefined);
 
 		if (option === ViewOptions.myLoads) {
 			setMyLoadsFilter(userInfo);
+		} else {
+			toggleShield();
 		}
 	}
 
@@ -68,10 +69,19 @@ function App() {
 	 * @returns an array of jumpers
 	 */
 	function getUpdatedJumperList(loadId: string): IJumperObject[] {
-		const LOCAL_STORAGE_KEY = 'load' + loadId + '.jumperList';
-		const storedJSON: string = localStorage.getItem(LOCAL_STORAGE_KEY) || '';
+		const storedJSON: string =
+			localStorage.getItem(getJumperListLocalStorageKey(loadId)) || '';
 		if (storedJSON === '') return [];
 		return JSON.parse(storedJSON);
+	}
+
+	/**
+	 * Constructs the local storage key for a jumper list of a load
+	 * @param loadId - the load ID we're interested in
+	 * @returns the string key
+	 */
+	function getJumperListLocalStorageKey(loadId: string): string {
+		return 'load' + loadId + '.jumperList';
 	}
 
 	/**
@@ -91,7 +101,7 @@ function App() {
 				});
 			}
 		});
-		return myLoads;
+		return myLoads; // TODO: retire this function
 	}
 
 	/**
@@ -128,24 +138,23 @@ function App() {
 		}
 	}
 
-	/* End View State */
-
 	/* Maintain load state at the app level */
 	const [loadList, setLoadList] = useState<ILoadObject[]>([]);
-	const LOCAL_STORAGE_KEY = 'loadList';
+	const LOAD_LOCAL_STORAGE_KEY = 'loadList';
 	const [loadFilter, setLoadFilter] = useState<number[]>([]);
 	const [shieldRaised, setShieldRaised] = useState(false);
 
 	// get the initial stored load list
 	useEffect(() => {
-		const storedJSON: string = localStorage.getItem(LOCAL_STORAGE_KEY) || '';
+		const storedJSON: string =
+			localStorage.getItem(LOAD_LOCAL_STORAGE_KEY) || '';
 		if (storedJSON === '') return;
 		setLoadList(JSON.parse(storedJSON));
 	}, []);
 
 	// update the stored load list whenever it is changed
 	useEffect(() => {
-		localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(loadList));
+		localStorage.setItem(LOAD_LOCAL_STORAGE_KEY, JSON.stringify(loadList));
 	}, [loadList]);
 	/* end load state */
 

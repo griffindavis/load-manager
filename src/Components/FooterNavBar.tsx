@@ -25,7 +25,7 @@ function FooterNavBar(props: {
 	 * Function to handle clicking the add new load button on the mobile view
 	 */
 	function handleAddNewLoad() {
-		if (optionSelected !== undefined) return;
+		if (optionSelected !== undefined) return; // Don't add a load with the shield raised
 		setLoadList((previousLoads) => {
 			return [
 				...previousLoads,

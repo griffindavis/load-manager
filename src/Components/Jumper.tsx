@@ -33,10 +33,14 @@ function Jumper(props: {
 		setData(JSON.parse(storedJSON));
 	}, []);
 
+	/**
+	 * Handles jumper type filtering
+	 * @param e -the js event
+	 */
 	function handleTypeSelection(e: SyntheticEvent) {
 		// updating the jumpers attributes
 		switch (e.currentTarget.getAttribute('data-type')) {
-			case 'video':
+			case 'video': // TODO: these shoulde be enumerated
 				setData({
 					...data,
 					isVideographer: !data.isVideographer,
@@ -56,7 +60,7 @@ function Jumper(props: {
 				break;
 		}
 		// make sure the right buttons are selected
-		const classList = e.currentTarget.classList;
+		const classList = e.currentTarget.classList; // TODO: is it better to do DOM manipulation or to use a reference
 		if (classList.contains('selected')) {
 			classList.remove('selected');
 		} else {
@@ -64,6 +68,10 @@ function Jumper(props: {
 		}
 	}
 
+	/**
+	 * Handles clicking on an individual jumper
+	 * @param e - the js event
+	 */
 	function handleClick(e: SyntheticEvent) {
 		// event handler for displaying additional details on a jumper
 		const classList = e.currentTarget.nextElementSibling?.classList;
@@ -75,6 +83,10 @@ function Jumper(props: {
 		}
 	}
 
+	/**
+	 * Determines whether this jumper is filtered from the list
+	 * @returns - true or false
+	 */
 	function isFiltered(): boolean {
 		// don't render if filtered out
 		if (props.filters.instructor && !data.isInstructor) return true;
