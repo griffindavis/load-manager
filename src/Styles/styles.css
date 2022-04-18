@@ -586,7 +586,7 @@ body {
   }
   .loadContainer {
     width: 100vw;
-    -ms-grid-columns: (1fr)[4];
+
         grid-template-columns: repeat(4, 1fr);
   }
 }

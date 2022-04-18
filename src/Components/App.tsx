@@ -1,4 +1,4 @@
-import './styles.css';
+import '../Styles/styles.css';
 import JumperList from './JumperList';
 import LoadContainer from './LoadContainer';
 import { Helmet } from 'react-helmet';
@@ -14,9 +14,8 @@ import IJumperObject from './IJumperObject';
 import Menu from './Menu';
 
 function App() {
+	//TODO: full reevaluation of the code
 	// TODO: Add a button to add jumpers -- this will also need a popup
-
-	// TODO: Menu page
 	// TODO: Notifications page
 
 	/* User Info */
