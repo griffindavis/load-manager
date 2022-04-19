@@ -14,7 +14,6 @@ import IJumperObject from './IJumperObject';
 import Menu from './Menu';
 
 function App() {
-	// TODO: full reevaluation of the code
 	// TODO: Add a button to add jumpers -- this will also need a popup
 	// TODO: Notifications page
 
