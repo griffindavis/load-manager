@@ -10,29 +10,26 @@ function LoadContainer(props: {
 	loadFilter: number[];
 	userInfo: IUserInfo;
 }) {
-	//const [loadList, setLoadList] = useState<ILoadObject[]>([]);
-	//const LOCAL_STORAGE_KEY = 'loadList';
 	const scrollToRef = useRef<HTMLDivElement>(null);
 
 	const draggingLoadId = useRef('');
 	const draggingLoadNumber = useRef(0);
 	const { loadList, setLoadList, loadFilter } = props;
 
-	// useEffect(() => {
-	// 	const storedJSON: string = localStorage.getItem(LOCAL_STORAGE_KEY) || '';
-	// 	if (storedJSON === '') return;
-	// 	setLoadList(JSON.parse(storedJSON));
-	// }, []);
-
-	// useEffect(() => {
-	// 	localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(loadList));
-	// }, [loadList]);
-
-	var setDraggingLoad = (loadId: string, num: number) => {
+	/**
+	 * Saves off the load details being dragged
+	 * @param loadId - the load ID to set
+	 * @param num - the load number to set
+	 */
+	function setDraggingLoad(loadId: string, num: number) {
 		draggingLoadId.current = loadId;
 		draggingLoadNumber.current = num;
-	};
+	}
 
+	/**
+	 * Handles dropping an element on a load
+	 * @param event - drag event
+	 */
 	function handleOnDrop(event: React.DragEvent<HTMLDivElement>) {
 		event.preventDefault();
 		document.querySelector('.dragging')?.classList?.remove('dragging'); // don't let shaking persist
@@ -70,6 +67,11 @@ function LoadContainer(props: {
 		}
 	}
 
+	/**
+	 * Determines the load's index in the array
+	 * @param id - the load ID
+	 * @returns
+	 */
 	function getLoadPosition(id: string) {
 		for (let i = 0; i < loadList.length; i++) {
 			if (loadList[i].id === id) {
@@ -79,12 +81,16 @@ function LoadContainer(props: {
 		return 0;
 	}
 
-	// position is the new position
+	/**
+	 * Reredners the loads in their new positions
+	 * @param id - the load ID
+	 * @param position  - the new position
+	 * @returns - nothing
+	 */
 	function reorderLoads(id: string, position: number) {
 		const newList: ILoadObject[] = [...loadList];
 		const index = getLoadPosition(id);
-		//console.log(id);
-		//console.log(`Position: ${position}\nIndex: ${index}`);
+
 		if (index + 1 === position) return; // don't set loads constantly
 		if (index + 1 < position) {
 			for (let i = position - 1; i >= index; i--) {
@@ -102,17 +108,22 @@ function LoadContainer(props: {
 			load.number = count;
 			count++;
 		});
+
+		// actually set the values
 		setDraggingLoad(id, position);
 		setLoadList([...newList]);
 	}
 
+	/**
+	 * Determine the position of the element being dragged
+	 * @param event - the drag event
+	 * @returns the new proposed position (index in the array)
+	 */
 	function determinePosition(event: React.DragEvent<HTMLDivElement>) {
 		const currentX = event.clientX;
 		const currentY = event.clientY;
 		const loads = Array.from(document.querySelectorAll('.load'));
-		const currentNumber = draggingLoadNumber.current; /*parseInt(
-			event.dataTransfer.getData('text/loadNum') || '0'
-		);*/
+		const currentNumber = draggingLoadNumber.current;
 
 		let closest = loads.length - 1; // this is the index
 		let minimumDistance = window.innerWidth;
@@ -129,7 +140,7 @@ function LoadContainer(props: {
 			}
 		}
 		let proposed = 0;
-		//console.log(`closest: ${closest}\nCurrent: ${currentNumber}`);
+
 		if (closest + 1 < currentNumber) {
 			proposed = minimumDistance < 0 ? closest + 1 : closest + 2;
 		} else if (closest + 1 === currentNumber) {
@@ -140,16 +151,25 @@ function LoadContainer(props: {
 		return proposed > 0 ? proposed : 1;
 	}
 
+	/**
+	 * Handles the logic for dragging the element over a load card
+	 * @param event - the drag event
+	 * @returns
+	 */
 	function handleOnDragOver(event: React.DragEvent<HTMLDivElement>) {
 		event.preventDefault();
 		if (event.dataTransfer.types[0] !== 'text/load') {
 			return;
 		}
-		//console.log(draggingLoad);
+
 		const position = determinePosition(event);
 		reorderLoads(draggingLoadId.current, position);
 	}
 
+	/**
+	 * Removes a load from the list
+	 * @param id - the load ID to remove
+	 */
 	function removeLoad(id: string) {
 		let count = 0;
 

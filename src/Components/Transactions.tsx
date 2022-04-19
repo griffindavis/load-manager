@@ -20,6 +20,11 @@ function Transactions(props: {
 	);
 }
 
+/**
+ * Calculates the total cost owed by the user
+ * @param loadList - the list of loads for the user
+ * @returns 
+ */
 function calculateTotal(loadList: ILoadObject[]): number {
 	let total = 0;
 	loadList.forEach((load) => {
@@ -28,6 +33,11 @@ function calculateTotal(loadList: ILoadObject[]): number {
 	return total;
 }
 
+/**
+ * Determines a price for a single load
+ * @param load - the load object
+ * @returns 
+ */
 function getPrice(load: ILoadObject) {
 	if (load.type === LoadType.low) {
 	}
