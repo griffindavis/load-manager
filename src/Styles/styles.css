@@ -197,6 +197,12 @@ body {
           align-items: center;
 }
 
+.load .addJumper {
+  position: absolute;
+  bottom: 5%;
+  right: 5%;
+}
+
 .cancel {
   min-width: 10%;
   min-height: 50%;
@@ -586,7 +592,7 @@ body {
   }
   .loadContainer {
     width: 100vw;
-
+    -ms-grid-columns: (1fr)[4];
         grid-template-columns: repeat(4, 1fr);
   }
 }
@@ -600,7 +606,7 @@ body {
 }
 
 .transactions,
-.menu-container {
+.menu-container, .jumperSelection {
   z-index: 100;
   position: absolute;
   min-width: 100vw;
@@ -618,7 +624,7 @@ body {
 }
 
 .transactions .item,
-.menu-container .item {
+.menu-container .item, .jumperSelection .item {
   min-width: 90%;
   min-height: 7vh;
   border-radius: 7rem;
@@ -640,7 +646,7 @@ body {
 }
 
 .transactions .card.total,
-.menu-container .card.total {
+.menu-container .card.total, .jumperSelection .card.total {
   position: absolute;
   display: -webkit-box;
   display: -ms-flexbox;

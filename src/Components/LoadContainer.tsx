@@ -1,14 +1,27 @@
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 import Load from './Load';
 import { v4 as uuidv4 } from 'uuid';
 import ILoadObject, { LoadType } from './ILoadObject';
 import IUserInfo from './IUserInfo';
+import { ViewOptions } from './ViewOptions';
+import IJumperObject from './IJumperObject';
 
 function LoadContainer(props: {
 	loadList: ILoadObject[];
 	setLoadList: React.Dispatch<React.SetStateAction<ILoadObject[]>>;
 	loadFilter: number[];
 	userInfo: IUserInfo;
+	handleChangeViewOption: (option: ViewOptions) => void;
+	setLoadToUpdate: React.Dispatch<
+		React.SetStateAction<{
+			load?: string | undefined;
+			jumper?: IJumperObject | undefined;
+		}>
+	>;
+	loadToUpdate: {
+		load?: string;
+		jumper?: IJumperObject;
+	};
 }) {
 	const scrollToRef = useRef<HTMLDivElement>(null);
 
@@ -207,6 +220,9 @@ function LoadContainer(props: {
 							removeLoad={removeLoad}
 							setDraggingLoad={setDraggingLoad}
 							userInfo={props.userInfo}
+							handleChangeViewOption={props.handleChangeViewOption}
+							setLoadToUpdate={props.setLoadToUpdate}
+							loadToUpdate={props.loadToUpdate}
 						/>
 					);
 				})}

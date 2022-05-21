@@ -12,6 +12,7 @@ import { ViewOptions } from './ViewOptions';
 import Transactions from './Transactions';
 import IJumperObject from './IJumperObject';
 import Menu from './Menu';
+import JumperSelectionPopup from './JumperSelectionPopup';
 
 function App() {
 	// TODO: Add a button to add jumpers -- this will also need a popup
@@ -30,6 +31,11 @@ function App() {
 	const [optionSelected, setOptionSelected] = useState<
 		ViewOptions | undefined
 	>();
+
+	const [loadToUpdate, setLoadToUpdate] = useState<{
+		load?: string;
+		jumper?: IJumperObject;
+	}>({});
 
 	const shield = document.getElementById('shield'); // keep a ref to shield
 	// TODO: useref?
@@ -52,7 +58,7 @@ function App() {
 	/**
 	 * Handles switching the view options and raising / lowering the shield
 	 */
-	function handleChangeViewOption(option: ViewOptions) {
+	function handleChangeViewOption(option?: ViewOptions) {
 		setOptionSelected(optionSelected === undefined ? option : undefined);
 
 		if (option === ViewOptions.myLoads) {
@@ -173,13 +179,21 @@ function App() {
 				setLoadList={setLoadList}
 				loadFilter={loadFilter}
 				userInfo={userInfo}
+				handleChangeViewOption={handleChangeViewOption}
+				setLoadToUpdate={setLoadToUpdate}
+				loadToUpdate={loadToUpdate}
 			/>
-			<Shield />
+			<Shield handleChangeViewOption={handleChangeViewOption} />
 			<Transactions
 				optionSelected={optionSelected}
 				loadList={getMyLoadDetails(userInfo.id)}
 			/>
 			<Menu userInfo={userInfo} optionSelected={optionSelected} />
+			<JumperSelectionPopup
+				optionSelected={optionSelected}
+				handleChangeViewOption={handleChangeViewOption}
+				setLoadToUpdate={setLoadToUpdate}
+			/>
 
 			<JumperList />
 

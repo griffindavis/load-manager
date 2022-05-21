@@ -2,6 +2,7 @@
 import React, { BaseSyntheticEvent, useEffect, useState } from 'react';
 import IJumperObject from './IJumperObject';
 import IUserInfo from './IUserInfo';
+import { ViewOptions } from './ViewOptions';
 
 function Load(
 	props: {
@@ -11,12 +12,24 @@ function Load(
 		removeLoad: (id: string) => void;
 		setDraggingLoad: (loadId: string, num: number) => void;
 		userInfo: IUserInfo;
+		handleChangeViewOption: (option: ViewOptions) => void;
+		setLoadToUpdate: React.Dispatch<
+			React.SetStateAction<{
+				load?: string | undefined;
+				jumper?: IJumperObject | undefined;
+			}>
+		>;
+		loadToUpdate: {
+			load?: string;
+			jumper?: IJumperObject;
+		};
 	},
 	key: string
 ) {
 	const [jumperList, setJumpers] = useState<IJumperObject[]>([]);
 	const LOCAL_STORAGE_KEY = 'load' + props.id + '.jumperList';
 	const userInfo = props.userInfo;
+	const loadToUpdate = props.loadToUpdate;
 
 	useEffect(() => {
 		const storedJSON: string = localStorage.getItem(LOCAL_STORAGE_KEY) || '';
@@ -31,6 +44,24 @@ function Load(
 	useEffect(() => {
 		localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(jumperList));
 	}, [jumperList]);
+
+	useEffect(() => {
+		if (loadToUpdate.jumper === undefined || loadToUpdate.load === undefined)
+			return;
+		else if (loadToUpdate.load !== props.id) return;
+		else if (jumperList.length >= 4) {
+			alert('This load already has the max number of jumpers :(');
+			return;
+		} else if (loadContainsJumper(loadToUpdate.jumper.id)) {
+			alert('This jumper is already on this load');
+			return;
+		}
+		const newId = loadToUpdate.jumper.id;
+		const newName = loadToUpdate.jumper.name;
+		setJumpers((prevJumpers) => {
+			return [...prevJumpers, { id: newId, name: newName }];
+		});
+	}, [loadToUpdate]);
 
 	/**
 	 * Handles the logic for removing a jumper from a load
@@ -123,6 +154,16 @@ function Load(
 		return jumperId === userInfo.id;
 	}
 
+	/**
+	 * Handles displaying and hiding the users loads
+	 */
+	function handleAddJumper() {
+		props.setLoadToUpdate((previous) => {
+			return { load: props.id, jumper: undefined };
+		});
+		props.handleChangeViewOption(ViewOptions.addJumper);
+	}
+
 	return (
 		<div
 			className="load card"
@@ -179,6 +220,10 @@ function Load(
 					)}
 				</ul>
 			</div>
+			<i
+				className="fas faImage fa-user-plus addJumper fa-2x"
+				onClick={handleAddJumper}
+			></i>
 		</div>
 	);
 }

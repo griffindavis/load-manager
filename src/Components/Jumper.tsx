@@ -6,16 +6,24 @@ import IJumperObject from './IJumperObject';
 function Jumper(props: {
 	key: string;
 	jumper: IJumperObject;
-	removeJumper: (e: SyntheticEvent) => void;
-	filters: {
+	removeJumper?: (e: SyntheticEvent) => void;
+	filters?: {
 		video: boolean;
 		instructor: boolean;
 		student: boolean;
 	};
+	fromPopup?: boolean;
+	setLoadToUpdate?: React.Dispatch<
+		React.SetStateAction<{
+			load?: string | undefined;
+			jumper?: IJumperObject | undefined;
+		}>
+	>;
 }) {
 	const LOCAL_STORAGE_KEY = `jumper.${props.jumper.id}`;
 	const [data, setData] = useState(props.jumper);
 	const isMounted = useRef(false); // used to prevent useEffect from overwriting the stored data
+	const fromPopup = props.fromPopup;
 	useEffect(() => {
 		// maintain the state of the data
 		if (!isMounted.current) {
@@ -89,61 +97,98 @@ function Jumper(props: {
 	 */
 	function isFiltered(): boolean {
 		// don't render if filtered out
-		if (props.filters.instructor && !data.isInstructor) return true;
-		if (props.filters.video && !data.isVideographer) return true;
-		if (props.filters.student && !data.isStudent) return true;
+		if (props.filters?.instructor && !data.isInstructor) return true;
+		if (props.filters?.video && !data.isVideographer) return true;
+		if (props.filters?.student && !data.isStudent) return true;
 		return false;
 	}
 
-	return (
-		<>
-			<span
-				className={`jumper card ${isFiltered() ? 'hide' : ''}`}
-				draggable="true"
-				onDragStart={(event) => {
-					event.dataTransfer.setData('text/jumper', JSON.stringify(data));
-				}}
-				onClick={handleClick}
-			>
-				<div className="header">{data.name}</div>
-				<div className="cancel" onClick={props.removeJumper} data-id={data.id}>
-					X
-				</div>
-			</span>
+	/**
+	 * Handles setting the data to add a jumper to the load
+	 * @returns void
+	 */
+	function handleAddJumperByClick() {
+		if (props.setLoadToUpdate === undefined) return;
+		props.setLoadToUpdate((previous) => {
+			return { load: previous.load, jumper: props.jumper };
+		});
+	}
 
-			<div className="dropdown details">
-				<div className="dropdown-menu">
-					<span className="dropdown-button">
-						<i
-							className={`fas fa-video faImage ${
-								data.isVideographer ? 'selected' : ''
-							}`}
-							onClick={handleTypeSelection}
-							data-type="video"
-						></i>
-					</span>
-					<span className="dropdown-button">
-						<i
-							className={`fas fa-chalkboard-teacher faImage ${
-								data.isInstructor ? 'selected' : ''
-							}`}
-							onClick={handleTypeSelection}
-							data-type="instructor"
-						></i>
-					</span>
-					<span className="dropdown-button">
-						<i
-							className={`fas fa-users faImage ${
-								data.isStudent ? 'selected' : ''
-							}`}
-							onClick={handleTypeSelection}
-							data-type="student"
-						></i>
-					</span>
+	/**
+	 * Constructs the html for a simple jumper
+	 * @returns the html for a simple jumper
+	 */
+	function simpleJumper() {
+		return (
+			<span className="item card" onClick={handleAddJumperByClick}>
+				<div className="header">{data.name}</div>
+			</span>
+		);
+	}
+
+	/**
+	 * Displays the complex jumper field
+	 * @returns The html for displaying a complex jumper field
+	 */
+	function complexJumper() {
+		return (
+			<>
+				<span
+					className={`jumper card ${isFiltered() ? 'hide' : ''} ${
+						fromPopup ? 'item' : ''
+					}`}
+					draggable="true"
+					onDragStart={(event) => {
+						event.dataTransfer.setData('text/jumper', JSON.stringify(data));
+					}}
+					onClick={handleClick}
+				>
+					<div className="header">{data.name}</div>
+					<div
+						className="cancel"
+						onClick={props.removeJumper}
+						data-id={data.id}
+					>
+						X
+					</div>
+				</span>
+
+				<div className="dropdown details">
+					<div className="dropdown-menu">
+						<span className="dropdown-button">
+							<i
+								className={`fas fa-video faImage ${
+									data.isVideographer ? 'selected' : ''
+								}`}
+								onClick={handleTypeSelection}
+								data-type="video"
+							></i>
+						</span>
+						<span className="dropdown-button">
+							<i
+								className={`fas fa-chalkboard-teacher faImage ${
+									data.isInstructor ? 'selected' : ''
+								}`}
+								onClick={handleTypeSelection}
+								data-type="instructor"
+							></i>
+						</span>
+						<span className="dropdown-button">
+							<i
+								className={`fas fa-users faImage ${
+									data.isStudent ? 'selected' : ''
+								}`}
+								onClick={handleTypeSelection}
+								data-type="student"
+							></i>
+						</span>
+					</div>
 				</div>
-			</div>
-		</>
-	);
+			</>
+		);
+	}
+
+	return <>{fromPopup ? simpleJumper() : complexJumper()}</>;
 }
 
 export default Jumper;
