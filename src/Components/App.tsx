@@ -15,7 +15,6 @@ import Menu from './Menu';
 import JumperSelectionPopup from './JumperSelectionPopup';
 
 function App() {
-	// TODO: Add a button to add jumpers -- this will also need a popup
 	// TODO: Notifications page
 
 	/* User Info */
