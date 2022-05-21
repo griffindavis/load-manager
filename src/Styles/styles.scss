@@ -1,0 +1,539 @@
+:root {
+	// define some variables
+	--card-background: #ffffff;
+	--card-border: #e5e5e5;
+	--color-selected: #9289ff;
+	--color-selected-compliment: #ff8c92;
+}
+
+* {
+	// setup defaults for the entire page
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+
+body {
+	margin: 0;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+		'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+		sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.App {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.navigation {
+	background: var(--color-selected);
+	width: 100%;
+	height: 5vh;
+	//border-radius: 0 0 10px 10px;
+
+	padding-left: 1rem;
+	padding-right: 1rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	font-size: 3rem;
+}
+
+.footer {
+	//border-radius: 10px 10px 0 0;
+}
+
+.card {
+	border: 1px solid var(--card-border);
+	border-radius: 10px;
+	background-color: var(--card-background);
+	filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+}
+
+.jumperListSection {
+	// start off with the small layout and don't display this
+	display: none;
+}
+
+.loadContainer {
+	width: 100vw; //TODO: add spacing for nav header and footer
+	height: 90vh;
+
+	display: grid;
+	grid-auto-rows: 50%;
+
+	overflow-y: scroll;
+}
+
+.shield {
+	display: none;
+
+	height: 90vh;
+	width: 100vw;
+	position: absolute;
+	background-color: #c4c4c4;
+	opacity: 0.7;
+}
+.raised {
+	display: block;
+}
+
+.load {
+	height: 90%;
+	width: 90%;
+	align-self: center;
+	justify-self: center;
+
+	// this should all be the same across platforms
+	.loadId {
+		height: 4rem;
+		width: 4rem;
+
+		display: flex;
+		margin-top: 0.5rem;
+		margin-left: 0.5rem;
+		border-radius: 50%;
+
+		align-items: center;
+		justify-content: center;
+
+		font-weight: bold;
+		text-align: center;
+		font-size: 2rem;
+
+		background-color: var(--color-selected);
+		color: var(--card-border);
+		backdrop-filter: blur(4px);
+		filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+	}
+
+	.deleteLoad {
+		margin-top: 0.5rem;
+		padding-right: 5%;
+
+		font-weight: bold;
+		font-size: 1.5rem;
+
+		color: var(--card-border);
+	}
+	.deleteLoad:hover {
+		cursor: pointer;
+	}
+
+	//TODO: Add the add jumper button
+
+	.jumperList {
+		// adds some spacing in the card
+		margin: 5%;
+	}
+
+	.loadHeader {
+		display: flex;
+		padding-bottom: 5%; // makes sure the shadow isn't cut off
+
+		justify-content: space-between; // keeps the buttons in the header on either side of the card
+	}
+
+	ul {
+		// list of jumpers
+		height: 75%;
+		width: 100%;
+
+		display: flex;
+		flex-direction: column;
+
+		margin-top: 0.5rem;
+		align-items: center;
+
+		.addMe {
+			align-items: center;
+			justify-content: center;
+
+			color: #cecece;
+			font-weight: bold;
+			font-size: 1rem;
+			border-radius: 1rem;
+			border: 3px dashed var(--card-border);
+			filter: none;
+		}
+	}
+
+	.jumper {
+		width: 95%;
+		min-height: 2.5rem;
+
+		display: flex;
+		margin-bottom: 0.5rem;
+
+		justify-content: center;
+		align-items: center;
+	}
+
+	.addJumper {
+		position: absolute;
+		bottom: 5%;
+		right: 5%;
+	}
+}
+
+.cancel {
+	min-width: 10%;
+	min-height: 50%; // make the hitbox larger
+
+	display: flex;
+
+	position: absolute;
+	right: 0.5rem;
+
+	font-weight: bold;
+	color: var(--card-border);
+
+	justify-content: center;
+	align-items: center;
+}
+.scrollTo {
+	// div to force a scroll when adding a new load
+	display: block;
+}
+
+.App {
+	display: flex;
+	width: 100vw;
+	height: 100vh;
+}
+
+.cancel:hover {
+	cursor: pointer;
+}
+
+.filterContainer {
+	display: flex;
+
+	flex-direction: row;
+	justify-content: space-between;
+}
+.filter {
+	height: 5vh; //TODO: probably want to handle this better
+	width: 30%;
+
+	display: flex;
+
+	align-items: center;
+	justify-content: center;
+}
+
+.faImage:hover {
+	cursor: pointer;
+	font-size: 2rem;
+}
+
+.faImage {
+	font-size: 1.5rem;
+	color: var(--card-border);
+	min-height: 2rem;
+	min-width: 2rem;
+	//background-color: var(--card-border);
+}
+
+.faImage.selected {
+	color: var(--color-selected);
+}
+
+.faImage.selected.compliment {
+	color: var(--color-selected-compliment);
+}
+.details {
+	// jumper detail dropdown
+	width: 20vw; //TODO: section this off better
+	height: 0px; // keeps it hidden by default -- this is what transitions
+
+	align-items: center;
+
+	overflow: hidden;
+
+	border: 0;
+	filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+	transition: all 0.5s ease-in-out;
+}
+
+.details.expanded {
+	height: 50px; //TODO: don't set hard coded heights or margins
+	margin-bottom: 8px; // fix this as a variable
+}
+
+.dropdown-button {
+	min-height: 5vh;
+	min-width: 25%;
+
+	display: flex;
+
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+
+	border: 1px solid var(--card-border);
+	border-radius: 10px;
+	background-color: var(--card-background);
+}
+
+.dropdown-menu {
+	display: flex;
+
+	flex-direction: row;
+	justify-content: space-around;
+}
+.dragging {
+	// animation for shaking
+	animation: shake 0.5s ease-in-out 0s infinite none;
+}
+
+@keyframes shake {
+	0% {
+		transform: translate(1px, 1px) rotate(0deg);
+	}
+	10% {
+		transform: translate(-1px, -2px) rotate(-1deg);
+	}
+	20% {
+		transform: translate(-3px, 0px) rotate(1deg);
+	}
+	30% {
+		transform: translate(3px, 2px) rotate(0deg);
+	}
+	40% {
+		transform: translate(1px, -1px) rotate(1deg);
+	}
+	50% {
+		transform: translate(-1px, 2px) rotate(-1deg);
+	}
+	60% {
+		transform: translate(-3px, 1px) rotate(0deg);
+	}
+	70% {
+		transform: translate(3px, 1px) rotate(-1deg);
+	}
+	80% {
+		transform: translate(-1px, -1px) rotate(1deg);
+	}
+	90% {
+		transform: translate(1px, 2px) rotate(0deg);
+	}
+	100% {
+		transform: translate(1px, -2px) rotate(-1deg);
+	}
+}
+
+.zeroState {
+	height: 97%;
+
+	display: flex;
+
+	margin: 1%;
+
+	align-items: center;
+	justify-content: center;
+
+	color: #cecece;
+	font-weight: bold;
+	font-size: 1.2rem;
+	border-radius: 10px;
+	border: 5px dashed var(--card-border);
+}
+
+#jumper-zero-state {
+	width: 20vw; // TODO: this likely should be done better
+	text-align: center;
+}
+
+@media screen {
+	@media (min-width: 800px) {
+		// less than 800px
+		.App {
+			flex-direction: row;
+		}
+		.navigation {
+			display: none;
+		}
+
+		.jumperListSection {
+			height: 100vh;
+			width: 25vw; // jumper list takes up a quarter of the space
+
+			display: flex;
+
+			justify-content: center;
+			flex-direction: column;
+
+			h1,
+			p {
+				// jumper list header
+				text-align: center;
+			}
+
+			.jumperListInputContainer {
+				position: relative;
+
+				overflow: visible;
+
+				.margin {
+					margin-right: 5px; // input form spacing
+				}
+
+				input {
+					//TODO: media query
+					width: 70%;
+					//padding-top: 8%; // push this down enough so that when the label pops up it is still visable
+
+					height: 100%;
+					border: none;
+					outline: none;
+
+					position: relative;
+					font-size: 1.1rem;
+				}
+
+				input:focus + .label-name .label-content,
+				input:valid + .label-name .label-content {
+					// moving the label up on focus
+					transform: translateY(-150%);
+					transition: transform 0.3s ease;
+				}
+
+				input:focus + .label-name::after,
+				input:valid + .label-name::after {
+					// moving the label back down
+					transform: translateX(0%);
+					transition: transform 0.3s ease;
+				}
+
+				label {
+					width: 70%; // TODO: this is the same as the input
+					height: 100%;
+
+					position: absolute; //TODO: is it possible to do this without positioning absolutely? That or a way to make this responsive?
+
+					bottom: 0px;
+					left: 0px;
+					pointer-events: none; // don't absorb the click since this is over the input
+
+					border-bottom: 1px solid var(--card-border);
+					overflow: visible;
+					transition: transform 0.3s ease;
+				}
+
+				label::after {
+					// underline for the input
+					width: 100%;
+					height: 100%;
+
+					position: absolute;
+
+					border-bottom: 3px solid var(--color-selected);
+					z-index: 99;
+					transform: translateX(-100%);
+
+					content: ''; // needed for ::after
+				}
+
+				.label-content {
+					position: absolute;
+					bottom: 0px;
+					transition: transform 0.3s ease;
+				}
+			}
+
+			.listOfJumpers {
+				height: 82%; // TODO: this is horrible
+				padding: 0.8rem;
+
+				display: flex;
+				flex-direction: column;
+				overflow-y: scroll;
+				align-items: center;
+			}
+
+			.jumper {
+				// each jumper item
+				width: 90%;
+				min-height: 5vh;
+				max-height: 5rem;
+
+				margin-bottom: 1rem;
+				padding: 0.5rem;
+
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+
+				align-items: center;
+			}
+
+			.hide {
+				display: none;
+			}
+		}
+		.loadContainer {
+			width: 100vw;
+			grid-template-columns: repeat(4, 1fr);
+		}
+	}
+}
+.hide {
+	display: none; // TODO: fix this dumb thing - currently it's hiding IDs
+}
+.checkedIn {
+	color: #92ff7a; //#42ff00;
+}
+
+.transactions,
+.menu-container, .jumperSelection {
+	z-index: 100;
+	position: absolute;
+	min-width: 100vw;
+	min-height: 90vh;
+	top: 5vh;
+
+	display: flex;
+	flex-direction: column;
+	overflow-y: scroll;
+
+	padding: 0.8rem;
+
+	.item {
+		min-width: 90%;
+		min-height: 7vh;
+		border-radius: 7rem;
+
+		margin-bottom: 1rem;
+		padding: 0.5rem;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+
+		align-items: center;
+	}
+
+	.card.total {
+		position: absolute;
+		display: flex;
+		bottom: 0.5rem;
+		right: 0.5rem;
+
+		font-weight: bold;
+
+		height: 4rem;
+		width: 4rem;
+
+		border-radius: 50%;
+
+		background-color: var(--card-background);
+		justify-content: center;
+		align-items: center;
+	}
+}
