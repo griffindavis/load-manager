@@ -23,11 +23,21 @@ function LoadContainer(props: {
 		jumper?: IJumperObject;
 	};
 }) {
-	const scrollToRef = useRef<HTMLDivElement>(null);
+	const scrollToRef = useRef<HTMLDivElement>(null); // used to scroll automatically when a new load is added
+
+	// destructure props
+	const {
+		loadList,
+		setLoadList,
+		loadFilter,
+		userInfo,
+		handleChangeViewOption,
+		setLoadToUpdate,
+		loadToUpdate,
+	} = props;
 
 	const draggingLoadId = useRef('');
 	const draggingLoadNumber = useRef(0);
-	const { loadList, setLoadList, loadFilter } = props;
 
 	/**
 	 * Saves off the load details being dragged
@@ -45,20 +55,23 @@ function LoadContainer(props: {
 	 */
 	function handleOnDrop(event: React.DragEvent<HTMLDivElement>) {
 		event.preventDefault();
+
 		document.querySelector('.dragging')?.classList?.remove('dragging'); // don't let shaking persist
 
 		if (event.dataTransfer.types[0] === 'text/jumper') {
 			const data = JSON.parse(event.dataTransfer.getData('text/jumper'));
-			const newId = data.id;
-			const newName = data.name;
-			if (newId !== '') {
+
+			const jumperId = data.id;
+			const jumperName = data.name;
+
+			if (jumperId !== '') {
 				setLoadList((previousLoads) => {
 					return [
 						...previousLoads,
 						{
 							id: uuidv4().toString(),
 							number: loadList.length + 1,
-							jumperList: [{ id: newId, name: newName }],
+							jumperList: [{ id: jumperId, name: jumperName }],
 							type: LoadType.high,
 						},
 					];
@@ -76,7 +89,7 @@ function LoadContainer(props: {
 			reorderLoads(
 				event.dataTransfer.getData('text/load'),
 				determinePosition(event)
-			);
+			); //TODO: replace getData with draggingLoadId
 		}
 	}
 
@@ -102,7 +115,7 @@ function LoadContainer(props: {
 	 */
 	function reorderLoads(id: string, position: number) {
 		const newList: ILoadObject[] = [...loadList];
-		const index = getLoadPosition(id);
+		const index = getLoadPosition(id); // TODO: this is just draggingLoadNumber - 1
 
 		if (index + 1 === position) return; // don't set loads constantly
 		if (index + 1 < position) {
@@ -135,11 +148,14 @@ function LoadContainer(props: {
 	function determinePosition(event: React.DragEvent<HTMLDivElement>) {
 		const currentX = event.clientX;
 		const currentY = event.clientY;
+
+		// need to querySelectorAll because we need the dom elements
 		const loads = Array.from(document.querySelectorAll('.load'));
 		const currentNumber = draggingLoadNumber.current;
 
 		let closest = loads.length - 1; // this is the index
 		let minimumDistance = window.innerWidth;
+
 		for (let i = 0; i < loads.length; i++) {
 			const box = loads[i].getBoundingClientRect();
 			if (currentY > box.bottom || currentY < box.top) {
@@ -175,6 +191,7 @@ function LoadContainer(props: {
 			return;
 		}
 
+		// Live reordering
 		const position = determinePosition(event);
 		reorderLoads(draggingLoadId.current, position);
 	}
@@ -187,7 +204,7 @@ function LoadContainer(props: {
 		let count = 0;
 
 		loadList.forEach((load) => {
-			// update the load count
+			// backfill any necessary load number changes
 			if (load.id === id) return;
 			count++;
 			load.number = count;
@@ -208,6 +225,7 @@ function LoadContainer(props: {
 				onDrop={handleOnDrop}
 			>
 				{loadList.map((load) => {
+					// filter out loads if we've applied a filter
 					if (loadFilter.length > 0 && !loadFilter.includes(load.number)) {
 						return null;
 					}
@@ -219,10 +237,10 @@ function LoadContainer(props: {
 							initialJumperList={load.jumperList}
 							removeLoad={removeLoad}
 							setDraggingLoad={setDraggingLoad}
-							userInfo={props.userInfo}
-							handleChangeViewOption={props.handleChangeViewOption}
-							setLoadToUpdate={props.setLoadToUpdate}
-							loadToUpdate={props.loadToUpdate}
+							userInfo={userInfo}
+							handleChangeViewOption={handleChangeViewOption}
+							setLoadToUpdate={setLoadToUpdate}
+							loadToUpdate={loadToUpdate}
 						/>
 					);
 				})}
