@@ -14,45 +14,25 @@ import IJumperObject from './IJumperObject';
 import Menu from './Menu';
 import JumperSelectionPopup from './JumperSelectionPopup';
 
+/**
+ * The main function defining the application
+ */
 function App() {
 	// TODO: Notifications page
 
-	/* User Info */
+	//#region User Info  //TODO: This will be removed at a later date once a backend is implemented
 	const [userInfo, setUserInfo] = useState<IUserInfo>({
 		id: '5bb38709-8799-4b22-b561-6ee7d9a8d58a',
 		name: 'Griffin',
 		isCheckedIn: false,
 		canRemoveLoads: true,
 	});
-	/* End user info */
+	//endregion User Info
 
-	/* View State */
+	//#region App State
 	const [optionSelected, setOptionSelected] = useState<
 		ViewOptions | undefined
 	>();
-
-	const [loadToUpdate, setLoadToUpdate] = useState<{
-		load?: string;
-		jumper?: IJumperObject;
-	}>({});
-
-	const shield = document.getElementById('shield'); // keep a ref to shield
-	// TODO: useref?
-
-	/* End View State */
-
-	/**
-	 * Helper to raise and lower the shield
-	 */
-	function toggleShield() {
-		if (shieldRaised) {
-			shield?.classList.remove('raised');
-			setShieldRaised(false);
-		} else {
-			shield?.classList.add('raised');
-			setShieldRaised(true);
-		}
-	}
 
 	/**
 	 * Handles switching the view options and raising / lowering the shield
@@ -67,6 +47,41 @@ function App() {
 		}
 	}
 
+	const shield = document.getElementById('shield'); // keep a ref to shield
+	// TODO: useref?
+
+	//#endregion App State
+
+	//#region Messaging Between Components  //TODO: This could be a better, more generic, messaging system
+	const [loadToUpdate, setLoadToUpdate] = useState<{
+		load?: string;
+		jumper?: IJumperObject;
+	}>({});
+	//#endregion Messaging Between Components
+
+	/**
+	 * Helper to raise and lower the shield
+	 */
+	function toggleShield() {
+		if (shieldRaised) {
+			shield?.classList.remove('raised');
+			setShieldRaised(false);
+		} else {
+			shield?.classList.add('raised');
+			setShieldRaised(true);
+		}
+	}
+
+	//#region Load Specific Details
+	/**
+	 * Constructs the local storage key for a jumper list of a load
+	 * @param loadId - the load ID we're interested in
+	 * @returns the string key
+	 */
+	function getJumperListLocalStorageKey(loadId: string): string {
+		return 'load' + loadId + '.jumperList';
+	}
+
 	/**
 	 * Gets the up-to-date list of jumpers for a load
 	 * @param loadId - the ID of the load to get jumpers from
@@ -77,15 +92,6 @@ function App() {
 			localStorage.getItem(getJumperListLocalStorageKey(loadId)) || '';
 		if (storedJSON === '') return [];
 		return JSON.parse(storedJSON);
-	}
-
-	/**
-	 * Constructs the local storage key for a jumper list of a load
-	 * @param loadId - the load ID we're interested in
-	 * @returns the string key
-	 */
-	function getJumperListLocalStorageKey(loadId: string): string {
-		return 'load' + loadId + '.jumperList';
 	}
 
 	/**
@@ -107,7 +113,7 @@ function App() {
 		});
 		return myLoads; // TODO: retire this function
 	}
-
+	// #endregion End Load Specific Details
 	/**
 	 * Get's the load objects for loads that this user is on
 	 * @param userId - the user ID that is logged in
@@ -142,7 +148,7 @@ function App() {
 		}
 	}
 
-	/* Maintain load state at the app level */
+	//#region Maintain load state at the app level
 	const [loadList, setLoadList] = useState<ILoadObject[]>([]);
 	const LOAD_LOCAL_STORAGE_KEY = 'loadList';
 	const [loadFilter, setLoadFilter] = useState<number[]>([]);
@@ -160,12 +166,13 @@ function App() {
 	useEffect(() => {
 		localStorage.setItem(LOAD_LOCAL_STORAGE_KEY, JSON.stringify(loadList));
 	}, [loadList]);
-	/* end load state */
+	///#endregionend load state
 
 	return (
 		<div className="App">
 			<Helmet>
 				<script src="https://kit.fontawesome.com/4ae8208dc5.js"></script>
+				<title>DZ Manager</title>
 			</Helmet>
 
 			<HeaderNavBar

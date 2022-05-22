@@ -21,9 +21,11 @@ function Jumper(props: {
 	>;
 }) {
 	const LOCAL_STORAGE_KEY = `jumper.${props.jumper.id}`;
-	const [data, setData] = useState(props.jumper);
 	const isMounted = useRef(false); // used to prevent useEffect from overwriting the stored data
 	const fromPopup = props.fromPopup;
+
+	const [data, setData] = useState(props.jumper);
+
 	useEffect(() => {
 		// maintain the state of the data
 		if (!isMounted.current) {
@@ -104,18 +106,18 @@ function Jumper(props: {
 	}
 
 	/**
-	 * Handles setting the data to add a jumper to the load
-	 * @returns void
+	 * Handles setting the data to add a jumper to the load from the add jumper popup
 	 */
 	function handleAddJumperByClick() {
-		if (props.setLoadToUpdate === undefined) return;
-		props.setLoadToUpdate((previous) => {
-			return { load: previous.load, jumper: props.jumper };
-		});
+		if (props.setLoadToUpdate !== undefined) {
+			props.setLoadToUpdate((previous) => {
+				return { load: previous.load, jumper: props.jumper };
+			});
+		}
 	}
 
 	/**
-	 * Constructs the html for a simple jumper
+	 * Constructs the html for a simple jumper for the add jumper popup
 	 * @returns the html for a simple jumper
 	 */
 	function simpleJumper() {
@@ -127,7 +129,7 @@ function Jumper(props: {
 	}
 
 	/**
-	 * Displays the complex jumper field
+	 * Displays the complex jumper field for the jumper list on full screens
 	 * @returns The html for displaying a complex jumper field
 	 */
 	function complexJumper() {
@@ -188,6 +190,7 @@ function Jumper(props: {
 		);
 	}
 
+	// Determine which type jumper to render
 	return <>{fromPopup ? simpleJumper() : complexJumper()}</>;
 }
 
