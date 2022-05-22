@@ -7,7 +7,7 @@ import { ViewOptions } from './ViewOptions';
 function Load(
 	props: {
 		id: string;
-		number?: number;
+		number: number;
 		initialJumperList: IJumperObject[];
 		removeLoad: (id: string) => void;
 		setDraggingLoad: (loadId: string, num: number) => void;
@@ -26,16 +26,26 @@ function Load(
 	},
 	key: string
 ) {
+	const {
+		id,
+		number,
+		initialJumperList,
+		removeLoad,
+		setDraggingLoad,
+		userInfo,
+		handleChangeViewOption,
+		setLoadToUpdate,
+		loadToUpdate,
+	} = props;
+	const LOCAL_STORAGE_KEY = 'load' + id + '.jumperList';
 	const [jumperList, setJumpers] = useState<IJumperObject[]>([]);
-	const LOCAL_STORAGE_KEY = 'load' + props.id + '.jumperList';
-	const userInfo = props.userInfo;
-	const loadToUpdate = props.loadToUpdate;
 
+	//#region data storage
 	useEffect(() => {
 		const storedJSON: string = localStorage.getItem(LOCAL_STORAGE_KEY) || '';
 		if (storedJSON.length === 0) {
 			// this is the case when we create a new load
-			setJumpers(props.initialJumperList);
+			setJumpers(initialJumperList);
 		} else {
 			setJumpers(JSON.parse(storedJSON));
 		}
@@ -45,10 +55,16 @@ function Load(
 		localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(jumperList));
 	}, [jumperList]);
 
+	//#endregion data storage
+
+	/*
+	 * Once we have the necessary information in the "messaging system" go ahead and try to add that jumper to the load
+	 */
 	useEffect(() => {
+		// quit early if we're still missing information
 		if (loadToUpdate.jumper === undefined || loadToUpdate.load === undefined)
 			return;
-		else if (loadToUpdate.load !== props.id) return;
+		else if (loadToUpdate.load !== id) return;
 		else if (jumperList.length >= 4) {
 			alert('This load already has the max number of jumpers :(');
 			return;
@@ -69,7 +85,7 @@ function Load(
 	 */
 	function handleCancel(e: BaseSyntheticEvent) {
 		const id = e.target.offsetParent.firstChild.innerText;
-		// do this better with html dataset
+		//TODO: do this better
 		setJumpers(
 			jumperList.filter((entry) => {
 				return entry.id !== id;
@@ -96,7 +112,8 @@ function Load(
 	 */
 	function handleOnDrop(event: React.DragEvent<HTMLDivElement>) {
 		event.preventDefault();
-		document.querySelector('.dragging')?.classList?.remove('dragging');
+		document.querySelector('.dragging')?.classList?.remove('dragging'); // stop the animation
+
 		if (event.dataTransfer.types[0] === 'text/jumper') {
 			const data = JSON.parse(event.dataTransfer.getData('text/jumper'));
 			const newId = data.id;
@@ -123,17 +140,13 @@ function Load(
 	 */
 	function handleOnDragOver(event: React.DragEvent<HTMLDivElement>) {
 		event.preventDefault();
-		if (event.dataTransfer.types[0] !== 'text/jumper') {
-			// don't allow dropping an existing load onto another
-			//event.dataTransfer.dropEffect = 'none';
-		}
 	}
 
 	/**
 	 * Handles logic for deleting a load
 	 */
 	function handleLoadDelete() {
-		props.removeLoad(props.id);
+		removeLoad(id);
 	}
 
 	/**
@@ -158,10 +171,10 @@ function Load(
 	 * Handles displaying and hiding the users loads
 	 */
 	function handleAddJumper() {
-		props.setLoadToUpdate((previous) => {
-			return { load: props.id, jumper: undefined };
+		setLoadToUpdate((previous) => {
+			return { load: id, jumper: undefined };
 		});
-		props.handleChangeViewOption(ViewOptions.addJumper);
+		handleChangeViewOption(ViewOptions.addJumper);
 	}
 
 	return (
@@ -171,16 +184,16 @@ function Load(
 			onDragOver={handleOnDragOver}
 			draggable={true}
 			onDragStart={(event) => {
-				event.dataTransfer.setData('text/load', props.id);
-				if (props.number !== undefined) {
-					event.dataTransfer.setData('text/loadNum', props.number.toString());
-					props.setDraggingLoad(props.id, props.number);
+				event.dataTransfer.setData('text/load', id);
+				if (number !== undefined) {
+					event.dataTransfer.setData('text/loadNum', number.toString());
+					setDraggingLoad(id, number);
 					event.currentTarget.classList.add('dragging');
 				}
 			}}
 		>
 			<div className="loadHeader">
-				<div className="loadId">{props.number?.toString()}</div>
+				<div className="loadId">{number?.toString()}</div>
 				{userInfo.canRemoveLoads ? (
 					<div className="deleteLoad" onClick={handleLoadDelete}>
 						X
