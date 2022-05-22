@@ -6,6 +6,7 @@ function Transactions(props: {
 	loadList: ILoadObject[];
 }) {
 	if (props.optionSelected !== ViewOptions.transactions) return null;
+
 	const loadList = props.loadList;
 
 	return (
@@ -23,7 +24,7 @@ function Transactions(props: {
 /**
  * Calculates the total cost owed by the user
  * @param loadList - the list of loads for the user
- * @returns 
+ * @returns
  */
 function calculateTotal(loadList: ILoadObject[]): number {
 	let total = 0;
@@ -36,12 +37,21 @@ function calculateTotal(loadList: ILoadObject[]): number {
 /**
  * Determines a price for a single load
  * @param load - the load object
- * @returns 
+ * @returns
  */
 function getPrice(load: ILoadObject) {
-	if (load.type === LoadType.low) {
+	switch (load.type) {
+		case LoadType.low: {
+			return 13;
+		}
+
+		case LoadType.high: {
+			return 21;
+		}
+		default: {
+			return 21;
+		}
 	}
-	return 19;
 }
 
 export default Transactions;
