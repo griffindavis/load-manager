@@ -4,12 +4,8 @@ export enum LoadType {
 	high,
 	low,
 }
-export default interface ILoadObject extends ILoadObjectStorable {
-	jumperList: IJumperObject[];
-}
-
-export interface ILoadObjectStorable {
-	id: string;
+export default interface ILoadObject {
+	jumperList: IJumperObject[];id: string;
 	number: number;
 	type: LoadType;
 }
