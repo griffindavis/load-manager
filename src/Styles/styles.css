@@ -26,6 +26,11 @@ body {
   left: 0;
 }
 
+.sign-in {
+  padding: 1rem;
+  font-weight: bold;
+}
+
 .App {
   display: -webkit-box;
   display: -ms-flexbox;
