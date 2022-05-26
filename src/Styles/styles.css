@@ -467,16 +467,23 @@ body {
 
 @media screen and (min-width: 800px) {
   .App {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+  .contents {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
     -webkit-box-orient: horizontal;
     -webkit-box-direction: normal;
         -ms-flex-direction: row;
             flex-direction: row;
-  }
-  .navigation {
-    display: none;
+    width: 100vw;
   }
   .jumperListSection {
-    height: 100vh;
+    height: 90vh;
     width: 25vw;
     display: -webkit-box;
     display: -ms-flexbox;
@@ -597,7 +604,7 @@ body {
     display: none;
   }
   .loadContainer {
-    width: 100vw;
+    width: 80vw;
     -ms-grid-columns: (1fr)[4];
         grid-template-columns: repeat(4, 1fr);
   }
@@ -670,5 +677,15 @@ body {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+}
+
+@media screen and (min-width: 800px) {
+  .menu-container {
+    min-width: 100vw;
+  }
+  .menu-container .item {
+    max-width: 400px;
+    min-width: 0vw;
+  }
 }
 /*# sourceMappingURL=styles.css.map */

@@ -194,10 +194,6 @@ function App() {
 	}, [loadList]);
 	///#endregionend load state
 
-	function signOut() {
-		auth.signOut();
-	}
-
 	function authenticatedApp() {
 		return (
 			<>
@@ -205,31 +201,30 @@ function App() {
 					handleChangeViewOption={handleChangeViewOption}
 					optionSelected={optionSelected}
 				/>
-				<button className="sign-out" onClick={signOut}>
-					Sign Out
-				</button>
-				<LoadContainer
-					loadList={loadList}
-					setLoadList={setLoadList}
-					loadFilter={loadFilter}
-					userInfo={userInfo}
-					handleChangeViewOption={handleChangeViewOption}
-					setLoadToUpdate={setLoadToUpdate}
-					loadToUpdate={loadToUpdate}
-				/>
+				<section className="contents">
+					<LoadContainer
+						loadList={loadList}
+						setLoadList={setLoadList}
+						loadFilter={loadFilter}
+						userInfo={userInfo}
+						handleChangeViewOption={handleChangeViewOption}
+						setLoadToUpdate={setLoadToUpdate}
+						loadToUpdate={loadToUpdate}
+					/>
+					<JumperList />
+				</section>
+
 				<Shield handleChangeViewOption={handleChangeViewOption} />
 				<Transactions
 					optionSelected={optionSelected}
 					loadList={getMyLoadDetails(userInfo.id)}
 				/>
-				<Menu userInfo={userInfo} optionSelected={optionSelected} />
+				<Menu userInfo={userInfo} optionSelected={optionSelected} auth={auth} />
 				<JumperSelectionPopup
 					optionSelected={optionSelected}
 					handleChangeViewOption={handleChangeViewOption}
 					setLoadToUpdate={setLoadToUpdate}
 				/>
-
-				<JumperList />
 
 				<FooterNavBar
 					loadList={loadList}

@@ -5,7 +5,8 @@ export enum LoadType {
 	low,
 }
 export default interface ILoadObject {
-	jumperList: IJumperObject[];id: string;
+	jumperList: IJumperObject[];
+	id: string;
 	number: number;
 	type: LoadType;
 }

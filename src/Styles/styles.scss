@@ -29,7 +29,7 @@ body {
 	left: 0;
 }
 .sign-in {
-	
+
 }
 
 .App {
@@ -364,14 +364,16 @@ body {
 	@media (min-width: 800px) {
 		// less than 800px
 		.App {
-			flex-direction: row;
+			flex-direction: column;
 		}
-		.navigation {
-			display: none;
+		.contents {
+			display: flex;
+			flex-direction: row;	
+			width: 100vw;	
 		}
 
 		.jumperListSection {
-			height: 100vh;
+			height: 90vh; //TODO: remove when we remove the name section
 			width: 25vw; // jumper list takes up a quarter of the space
 
 			display: flex;
@@ -488,7 +490,7 @@ body {
 			}
 		}
 		.loadContainer {
-			width: 100vw;
+			width: 80vw;
 			grid-template-columns: repeat(4, 1fr);
 		}
 	}
@@ -506,6 +508,7 @@ body {
 	position: absolute;
 	min-width: 100vw;
 	min-height: 90vh;
+	
 	top: 5vh;
 
 	display: flex;
@@ -544,5 +547,17 @@ body {
 		background-color: var(--card-background);
 		justify-content: center;
 		align-items: center;
+	}
+}
+
+@media screen {
+	@media (min-width: 800px) {
+		.menu-container {
+			min-width: 100vw;
+			.item {
+				max-width: 400px;
+				min-width: 0vw;
+			}
+		}
 	}
 }
