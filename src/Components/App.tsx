@@ -13,6 +13,31 @@ import Transactions from './Transactions';
 import IJumperObject from './IJumperObject';
 import Menu from './Menu';
 import JumperSelectionPopup from './JumperSelectionPopup';
+import SignIn from './SignIn';
+
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import 'firebase/analytics';
+
+import { useAuthState } from 'react-firebase-hooks/auth';
+
+// Import the functions you need from the SDKs you need
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+	apiKey: 'AIzaSyCvd-LhmaeOiuuQLrPni_L6CneU0vpvN5w',
+	authDomain: 'load-manager-976d8.firebaseapp.com',
+	projectId: 'load-manager-976d8',
+	storageBucket: 'load-manager-976d8.appspot.com',
+	messagingSenderId: '406786636155',
+	appId: '1:406786636155:web:47b31c66e5d30b282865de',
+	measurementId: 'G-Z00EJV9ET3',
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
 /**
  * The main function defining the application
@@ -34,6 +59,7 @@ function App() {
 		ViewOptions | undefined
 	>();
 
+	const [userAuth] = useAuthState(auth);
 	/**
 	 * Handles switching the view options and raising / lowering the shield
 	 */
@@ -168,50 +194,63 @@ function App() {
 	}, [loadList]);
 	///#endregionend load state
 
+	function signOut() {
+		auth.signOut();
+	}
+
+	function authenticatedApp() {
+		return (
+			<>
+				<HeaderNavBar
+					handleChangeViewOption={handleChangeViewOption}
+					optionSelected={optionSelected}
+				/>
+				<button className="sign-out" onClick={signOut}>
+					Sign Out
+				</button>
+				<LoadContainer
+					loadList={loadList}
+					setLoadList={setLoadList}
+					loadFilter={loadFilter}
+					userInfo={userInfo}
+					handleChangeViewOption={handleChangeViewOption}
+					setLoadToUpdate={setLoadToUpdate}
+					loadToUpdate={loadToUpdate}
+				/>
+				<Shield handleChangeViewOption={handleChangeViewOption} />
+				<Transactions
+					optionSelected={optionSelected}
+					loadList={getMyLoadDetails(userInfo.id)}
+				/>
+				<Menu userInfo={userInfo} optionSelected={optionSelected} />
+				<JumperSelectionPopup
+					optionSelected={optionSelected}
+					handleChangeViewOption={handleChangeViewOption}
+					setLoadToUpdate={setLoadToUpdate}
+				/>
+
+				<JumperList />
+
+				<FooterNavBar
+					loadList={loadList}
+					setLoadList={setLoadList}
+					userInfo={userInfo}
+					setUserInfo={setUserInfo}
+					setLoadFilter={setLoadFilter}
+					handleChangeViewOption={handleChangeViewOption}
+					optionSelected={optionSelected}
+				/>
+			</>
+		);
+	}
+
 	return (
 		<div className="App">
 			<Helmet>
 				<script src="https://kit.fontawesome.com/4ae8208dc5.js"></script>
 				<title>DZ Manager</title>
 			</Helmet>
-
-			<HeaderNavBar
-				handleChangeViewOption={handleChangeViewOption}
-				optionSelected={optionSelected}
-			/>
-
-			<LoadContainer
-				loadList={loadList}
-				setLoadList={setLoadList}
-				loadFilter={loadFilter}
-				userInfo={userInfo}
-				handleChangeViewOption={handleChangeViewOption}
-				setLoadToUpdate={setLoadToUpdate}
-				loadToUpdate={loadToUpdate}
-			/>
-			<Shield handleChangeViewOption={handleChangeViewOption} />
-			<Transactions
-				optionSelected={optionSelected}
-				loadList={getMyLoadDetails(userInfo.id)}
-			/>
-			<Menu userInfo={userInfo} optionSelected={optionSelected} />
-			<JumperSelectionPopup
-				optionSelected={optionSelected}
-				handleChangeViewOption={handleChangeViewOption}
-				setLoadToUpdate={setLoadToUpdate}
-			/>
-
-			<JumperList />
-
-			<FooterNavBar
-				loadList={loadList}
-				setLoadList={setLoadList}
-				userInfo={userInfo}
-				setUserInfo={setUserInfo}
-				setLoadFilter={setLoadFilter}
-				handleChangeViewOption={handleChangeViewOption}
-				optionSelected={optionSelected}
-			/>
+			{userAuth ? authenticatedApp() : <SignIn app={app} />}
 		</div>
 	);
 }
