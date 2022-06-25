@@ -2,12 +2,13 @@ import ILoadObject, { LoadType } from './ILoadObject';
 import { v4 as uuidv4 } from 'uuid';
 import IUserInfo from './IUserInfo';
 import { ViewOptions } from './ViewOptions';
+import { collection, doc, Firestore, setDoc } from 'firebase/firestore';
 
 function FooterNavBar(props: {
+	firestore: Firestore;
 	loadList: ILoadObject[];
 	setLoadList: React.Dispatch<React.SetStateAction<ILoadObject[]>>;
 	userInfo: IUserInfo;
-	setUserInfo: React.Dispatch<React.SetStateAction<IUserInfo>>;
 	setLoadFilter: React.Dispatch<React.SetStateAction<number[]>>;
 	handleChangeViewOption: (option: ViewOptions) => void;
 	optionSelected: ViewOptions | undefined;
@@ -16,7 +17,7 @@ function FooterNavBar(props: {
 		loadList,
 		setLoadList,
 		userInfo,
-		setUserInfo,
+		
 		handleChangeViewOption,
 		optionSelected,
 	} = props; // destructure props
@@ -51,12 +52,10 @@ function FooterNavBar(props: {
 	 * Handles toggling the user's checked in status
 	 */
 	function toggleCheckedIn() {
-		setUserInfo((previousInfo) => {
-			return {
-				...previousInfo,
-				isCheckedIn: !previousInfo.isCheckedIn,
-			};
-		});
+		console.log(userInfo.id);
+		let ref = doc(props.firestore, 'users', userInfo.id);
+		console.log(ref);
+		setDoc(ref, { isCheckedIn: !userInfo.isCheckedIn }, { merge: true });
 	}
 
 	/**

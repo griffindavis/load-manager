@@ -66,8 +66,8 @@ function App() {
 	useEffect(() => {
 		if (user === undefined) return;
 		setUserInfo({
-			id: user.id,
-			name: user.name,
+			id: auth?.currentUser?.uid || 'fail',
+			name: user.Name,
 			isCheckedIn: user.isCheckedIn,
 			canRemoveLoads: user.canRemoveLoads,
 		});
@@ -247,10 +247,10 @@ function App() {
 				/>
 
 				<FooterNavBar
+					firestore={firestore}
 					loadList={loadList}
 					setLoadList={setLoadList}
 					userInfo={userInfo}
-					setUserInfo={setUserInfo}
 					setLoadFilter={setLoadFilter}
 					handleChangeViewOption={handleChangeViewOption}
 					optionSelected={optionSelected}
