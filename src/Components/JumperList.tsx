@@ -6,48 +6,62 @@ import {
 	KeyboardEvent,
 } from 'react';
 import IJumperObject from './IJumperObject';
-import { createNewJumper } from './IJumperObject';
 import JumperNavBar from './JumperNavBar';
 import Jumper from './Jumper';
+import { useCollection } from 'react-firebase-hooks/firestore';
+import {
+	addDoc,
+	collection,
+	deleteDoc,
+	Firestore,
+	doc,
+} from 'firebase/firestore';
 
-const LOCAL_STORAGE_KEY = 'jumperList.jumpers';
-
-function JumperList() {
+function JumperList(props: { firestore: Firestore }) {
 	const [filters, setFilters] = useState({
 		video: false,
 		instructor: false,
 		student: false,
 	});
+
+	const { firestore } = props;
 	const [jumpers, setJumpers] = useState<IJumperObject[]>([]);
+	const [dbJumpers, jumperLoading, jumperError] = useCollection(
+		collection(firestore, 'jumpers'),
+		{
+			snapshotListenOptions: { includeMetadataChanges: true },
+		}
+	);
 
 	const jumperNameRef = useRef<HTMLInputElement>(null);
-	const isLoaded = useRef(false);
-
-	//#region data storage
-	useEffect(() => {
-		// maintain local storage of the jumper list
-		if (!isLoaded.current) {
-			return; // don't set local storage on mount
-		}
-		localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(jumpers));
-	}, [jumpers]);
 
 	useEffect(() => {
-		// get the initial list from local storage
-		const storedJSON: string = localStorage.getItem(LOCAL_STORAGE_KEY) || '';
-		if (storedJSON === '') return;
-		const storedJumpers = JSON.parse(storedJSON);
-		if (storedJumpers !== '') {
-			setJumpers(storedJumpers);
-		}
-		isLoaded.current = true;
-	}, []);
-
-	//#endregion data storage
+		const array: IJumperObject[] = [];
+		dbJumpers?.docs.forEach((doc) => {
+			array.push({
+				id: doc.id,
+				name: doc.data().name,
+				isVideographer: doc.data().isVideographer,
+				isInstructor: doc.data().isInstructor,
+				isStudent: doc.data().isStudent,
+			});
+			setJumpers(array);
+		});
+	}, [dbJumpers]);
 
 	useEffect(() => {
 		// force a re-render of the list when we update the filters
 	}, [filters]);
+
+	/**
+	 * Creates a new jumper in the database
+	 * @param name - the name of the jumper
+	 */
+	function createNewJumper(name: string): void {
+		addDoc(collection(firestore, 'jumpers'), {
+			name: name,
+		});
+	}
 
 	/**
 	 * Handle adding a new jumper to the list
@@ -64,21 +78,9 @@ function JumperList() {
 				name = jumperNameRef.current.value;
 				jumperNameRef.current.value = ''; // reset the entry field
 
-				const newJumper = createNewJumper();
-				newJumper.name = name;
-				setJumpers((prevJumpers) => {
-					return [...prevJumpers, newJumper];
-				});
+				createNewJumper(name);
 			}
 		}
-	}
-
-	/**
-	 * Handles clearing the local storage of all jumpers
-	 */
-	function handleClear() {
-		setJumpers([]);
-		localStorage.setItem(LOCAL_STORAGE_KEY, '');
 	}
 
 	/**
@@ -87,11 +89,9 @@ function JumperList() {
 	 */
 	function removeJumper(e: SyntheticEvent) {
 		const id = e.currentTarget.getAttribute('data-id');
-		setJumpers(
-			jumpers.filter((entry) => {
-				return entry.id !== id;
-			})
-		);
+		if (id !== null) {
+			deleteDoc(doc(firestore, 'jumpers', id));
+		}
 	}
 
 	/**
@@ -147,9 +147,6 @@ function JumperList() {
 				</label>
 				<button id="AddJumper" className="margin" onClick={handleAddNewJumper}>
 					Add
-				</button>
-				<button onClick={handleClear} className="margin">
-					Clear All
 				</button>
 			</div>
 		</div>

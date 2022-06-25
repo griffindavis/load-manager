@@ -18,8 +18,11 @@ import SignIn from './SignIn';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import 'firebase/analytics';
+import 'firebase/firestore';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { getFirestore, doc } from 'firebase/firestore';
+import { useDocument } from 'react-firebase-hooks/firestore';
 
 // Import the functions you need from the SDKs you need
 
@@ -38,6 +41,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const firestore = getFirestore(app);
 
 /**
  * The main function defining the application
@@ -60,6 +64,15 @@ function App() {
 	>();
 
 	const [userAuth] = useAuthState(auth);
+
+	// reference the user
+	// const [user, userLoading, userError] = useDocument(
+	// 	doc(firestore, 'users', auth.currentUser?.uid || '')
+	// );
+	// useEffect(() => {
+	// 	console.log(user?.data());
+	// }, [user]);
+
 	/**
 	 * Handles switching the view options and raising / lowering the shield
 	 */
@@ -211,7 +224,7 @@ function App() {
 						setLoadToUpdate={setLoadToUpdate}
 						loadToUpdate={loadToUpdate}
 					/>
-					<JumperList />
+					<JumperList firestore={firestore} />
 				</section>
 
 				<Shield handleChangeViewOption={handleChangeViewOption} />

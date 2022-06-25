@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import { SyntheticEvent, useEffect, useRef, useState } from 'react';
+import { SyntheticEvent } from 'react';
 import IJumperObject from './IJumperObject';
 
 function Jumper(props: {
@@ -20,28 +20,8 @@ function Jumper(props: {
 		}>
 	>;
 }) {
-	const LOCAL_STORAGE_KEY = `jumper.${props.jumper.id}`;
-	const isMounted = useRef(false); // used to prevent useEffect from overwriting the stored data
 	const fromPopup = props.fromPopup;
-
-	const [data, setData] = useState(props.jumper);
-
-	useEffect(() => {
-		// maintain the state of the data
-		if (!isMounted.current) {
-			// so we don't overwrite the localstorage
-			isMounted.current = true;
-			return;
-		}
-		localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
-	}, [data]);
-
-	useEffect(() => {
-		// get the localstorage on initial load
-		const storedJSON: string = localStorage.getItem(LOCAL_STORAGE_KEY) || '';
-		if (storedJSON === '') return;
-		setData(JSON.parse(storedJSON));
-	}, []);
+	const data = props.jumper;
 
 	/**
 	 * Handles jumper type filtering
@@ -49,25 +29,10 @@ function Jumper(props: {
 	 */
 	function handleTypeSelection(e: SyntheticEvent) {
 		// updating the jumpers attributes
-		switch (e.currentTarget.getAttribute('data-type')) {
-			case 'video': // TODO: these shoulde be enumerated
-				setData({
-					...data,
-					isVideographer: !data.isVideographer,
-				});
-				break;
-			case 'instructor':
-				setData({
-					...data,
-					isInstructor: !data.isInstructor,
-				});
-				break;
-			case 'student':
-				setData({
-					...data,
-					isStudent: !data.isStudent,
-				});
-				break;
+		switch (
+			e.currentTarget.getAttribute('data-type')
+			//TODO: this should be a different editor
+		) {
 		}
 		// make sure the right buttons are selected
 		const classList = e.currentTarget.classList; // TODO: is it better to do DOM manipulation or to use a reference
@@ -84,6 +49,7 @@ function Jumper(props: {
 	 */
 	function handleClick(e: SyntheticEvent) {
 		// event handler for displaying additional details on a jumper
+		//TODO: handle this differently
 		const classList = e.currentTarget.nextElementSibling?.classList;
 		if (classList === undefined) {
 		} else if (classList.contains('expanded')) {
