@@ -33,8 +33,6 @@ function JumperList(props: { firestore: Firestore }) {
 		}
 	);
 
-	const jumperNameRef = useRef<HTMLInputElement>(null);
-
 	useEffect(() => {
 		const array: IJumperObject[] = [];
 		dbJumpers?.docs.forEach((doc) => {
@@ -52,6 +50,8 @@ function JumperList(props: { firestore: Firestore }) {
 	useEffect(() => {
 		// force a re-render of the list when we update the filters
 	}, [filters]);
+
+	const jumperNameRef = useRef<HTMLInputElement>(null);
 
 	/**
 	 * Creates a new jumper in the database
