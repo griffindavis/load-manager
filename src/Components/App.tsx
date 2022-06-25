@@ -22,7 +22,7 @@ import 'firebase/firestore';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { getFirestore, doc } from 'firebase/firestore';
-import { useDocument } from 'react-firebase-hooks/firestore';
+import { useDocument, useDocumentData } from 'react-firebase-hooks/firestore';
 
 // Import the functions you need from the SDKs you need
 
@@ -49,29 +49,36 @@ const firestore = getFirestore(app);
 function App() {
 	// TODO: Notifications page
 
-	//#region User Info  //TODO: This will be removed at a later date once a backend is implemented
+	//#region User Info
+	const [userAuth] = useAuthState(auth);
+
 	const [userInfo, setUserInfo] = useState<IUserInfo>({
-		id: '5bb38709-8799-4b22-b561-6ee7d9a8d58a',
-		name: 'Griffin',
+		id: '',
+		name: '',
 		isCheckedIn: false,
-		canRemoveLoads: true,
+		canRemoveLoads: false,
 	});
+
+	const [user, userLoading, error] = useDocumentData(
+		doc(firestore, 'users', userAuth?.uid || '1')
+	);
+
+	useEffect(() => {
+		if (user === undefined) return;
+		setUserInfo({
+			id: user.id,
+			name: user.name,
+			isCheckedIn: user.isCheckedIn,
+			canRemoveLoads: user.canRemoveLoads,
+		});
+	}, [user]);
+
 	//endregion User Info
 
 	//#region App State
 	const [optionSelected, setOptionSelected] = useState<
 		ViewOptions | undefined
 	>();
-
-	const [userAuth] = useAuthState(auth);
-
-	// reference the user
-	// const [user, userLoading, userError] = useDocument(
-	// 	doc(firestore, 'users', auth.currentUser?.uid || '')
-	// );
-	// useEffect(() => {
-	// 	console.log(user?.data());
-	// }, [user]);
 
 	/**
 	 * Handles switching the view options and raising / lowering the shield
