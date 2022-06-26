@@ -1,5 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import {
+	Firestore,
+	doc,
+	QuerySnapshot,
+	DocumentData,
+} from 'firebase/firestore';
 import React, { BaseSyntheticEvent, useEffect, useState } from 'react';
+import { useDocumentData } from 'react-firebase-hooks/firestore';
 import IJumperObject from './IJumperObject';
 import IUserInfo from './IUserInfo';
 import { ViewOptions } from './ViewOptions';
@@ -8,7 +15,6 @@ function Load(
 	props: {
 		id: string;
 		number: number;
-		initialJumperList: IJumperObject[];
 		removeLoad: (id: string) => void;
 		setDraggingLoad: (loadId: string, num: number) => void;
 		userInfo: IUserInfo;
@@ -23,39 +29,45 @@ function Load(
 			load?: string;
 			jumper?: IJumperObject;
 		};
+		firestore: Firestore;
+		dbJumpers: QuerySnapshot<DocumentData> | undefined;
 	},
 	key: string
 ) {
 	const {
 		id,
 		number,
-		initialJumperList,
 		removeLoad,
 		setDraggingLoad,
 		userInfo,
 		handleChangeViewOption,
 		setLoadToUpdate,
 		loadToUpdate,
+		firestore,
+		dbJumpers,
 	} = props;
-	const LOCAL_STORAGE_KEY = 'load' + id + '.jumperList';
+
 	const [jumperList, setJumpers] = useState<IJumperObject[]>([]);
 
 	//#region data storage
-	useEffect(() => {
-		// const storedJSON: string = localStorage.getItem(LOCAL_STORAGE_KEY) || '';
-		// if (storedJSON.length === 0) {
-		// 	// this is the case when we create a new load
-		setJumpers(initialJumperList);
-		// } else {
-		// 	setJumpers(JSON.parse(storedJSON));
-		// }
-	}, []);
 
-	console.log(initialJumperList);
-
+	const [thisLoad, loading, error] = useDocumentData(
+		doc(firestore, 'loads', id)
+	);
 	useEffect(() => {
-		localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(jumperList));
-	}, [jumperList]);
+		const tempArray: IJumperObject[] = [];
+		const jumperList = thisLoad?.jumpers;
+		jumperList?.forEach((jumper: any) => {
+			let reference = dbJumpers?.docs.find((doc) => {
+				return doc.id === jumper.id;
+			});
+			tempArray.push({
+				id: reference?.id || '',
+				name: reference?.data().name,
+			});
+		});
+		setJumpers(tempArray);
+	}, [thisLoad, dbJumpers]);
 
 	//#endregion data storage
 

@@ -5,6 +5,7 @@ import ILoadObject, { LoadType } from './ILoadObject';
 import IUserInfo from './IUserInfo';
 import { ViewOptions } from './ViewOptions';
 import IJumperObject from './IJumperObject';
+import { DocumentData, Firestore, QuerySnapshot } from 'firebase/firestore';
 
 function LoadContainer(props: {
 	loadList: ILoadObject[];
@@ -22,6 +23,8 @@ function LoadContainer(props: {
 		load?: string;
 		jumper?: IJumperObject;
 	};
+	firestore: Firestore;
+	dbJumpers: QuerySnapshot<DocumentData> | undefined;
 }) {
 	const scrollToRef = useRef<HTMLDivElement>(null); // used to scroll automatically when a new load is added
 
@@ -34,6 +37,8 @@ function LoadContainer(props: {
 		handleChangeViewOption,
 		setLoadToUpdate,
 		loadToUpdate,
+		firestore,
+		dbJumpers,
 	} = props;
 
 	const draggingLoadId = useRef('');
@@ -234,13 +239,14 @@ function LoadContainer(props: {
 							id={load.id}
 							number={load.number}
 							key={load.id}
-							initialJumperList={load.jumperList}
 							removeLoad={removeLoad}
 							setDraggingLoad={setDraggingLoad}
 							userInfo={userInfo}
 							handleChangeViewOption={handleChangeViewOption}
 							setLoadToUpdate={setLoadToUpdate}
 							loadToUpdate={loadToUpdate}
+							firestore={firestore}
+							dbJumpers={dbJumpers}
 						/>
 					);
 				})}

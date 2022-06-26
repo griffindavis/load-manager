@@ -8,32 +8,29 @@ import {
 import IJumperObject from './IJumperObject';
 import JumperNavBar from './JumperNavBar';
 import Jumper from './Jumper';
-import { useCollection } from 'react-firebase-hooks/firestore';
 import {
 	addDoc,
 	collection,
 	deleteDoc,
 	Firestore,
 	doc,
+	QuerySnapshot,
+	DocumentData,
 } from 'firebase/firestore';
 
-function JumperList(props: { firestore: Firestore }) {
+function JumperList(props: {
+	firestore: Firestore;
+	dbJumpers: QuerySnapshot<DocumentData> | undefined;
+}) {
 	const [filters, setFilters] = useState({
 		video: false,
 		instructor: false,
 		student: false,
 	});
 
-	const { firestore } = props;
+	const { firestore, dbJumpers } = props;
 
 	const [jumpers, setJumpers] = useState<IJumperObject[]>([]);
-
-	const [dbJumpers, jumperLoading, jumperError] = useCollection(
-		collection(firestore, 'jumpers'),
-		{
-			snapshotListenOptions: { includeMetadataChanges: true },
-		}
-	);
 
 	useEffect(() => {
 		const array: IJumperObject[] = [];

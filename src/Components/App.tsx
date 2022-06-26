@@ -80,6 +80,13 @@ function App() {
 		ViewOptions | undefined
 	>();
 
+	const [dbJumpers, jumperLoading, jumperError] = useCollection(
+		collection(firestore, 'jumpers'),
+		{
+			snapshotListenOptions: { includeMetadataChanges: true },
+		}
+	);
+
 	/**
 	 * Handles switching the view options and raising / lowering the shield
 	 */
@@ -203,6 +210,7 @@ function App() {
 		}
 	);
 
+	// render loadlist updates from the database
 	useEffect(() => {
 		const array: ILoadObject[] = [];
 		dbLoadList?.docs.forEach((load) => {
@@ -218,6 +226,7 @@ function App() {
 		setLoadList(array);
 	}, [dbLoadList]);
 
+	//TODO: do we really need to know about the jumpers at this point?
 	function convertJumperListToArray(list: any) {
 		const array: IJumperObject[] = [];
 		list.forEach((jumper: IJumperObject) => {
@@ -229,22 +238,9 @@ function App() {
 		return array;
 	}
 
-	const LOAD_LOCAL_STORAGE_KEY = 'loadList';
 	const [loadFilter, setLoadFilter] = useState<number[]>([]);
 	const [shieldRaised, setShieldRaised] = useState(false);
 
-	// get the initial stored load list
-	useEffect(() => {
-		// const storedJSON: string =
-		// 	localStorage.getItem(LOAD_LOCAL_STORAGE_KEY) || '';
-		// if (storedJSON === '') return;
-		// setLoadList(JSON.parse(storedJSON));
-	}, []);
-
-	// update the stored load list whenever it is changed
-	useEffect(() => {
-		localStorage.setItem(LOAD_LOCAL_STORAGE_KEY, JSON.stringify(loadList));
-	}, [loadList]);
 	///#endregionend load state
 
 	function authenticatedApp() {
@@ -263,8 +259,10 @@ function App() {
 						handleChangeViewOption={handleChangeViewOption}
 						setLoadToUpdate={setLoadToUpdate}
 						loadToUpdate={loadToUpdate}
+						firestore={firestore}
+						dbJumpers={dbJumpers}
 					/>
-					<JumperList firestore={firestore} />
+					<JumperList firestore={firestore} dbJumpers={dbJumpers} />
 				</section>
 
 				<Shield handleChangeViewOption={handleChangeViewOption} />
