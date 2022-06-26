@@ -59,9 +59,7 @@ function App() {
 		canRemoveLoads: false,
 	});
 
-	const [user, userLoading, error] = useDocumentData(
-		doc(firestore, 'users', userAuth?.uid || '1')
-	);
+	const [user] = useDocumentData(doc(firestore, 'users', userAuth?.uid || '1'));
 
 	useEffect(() => {
 		if (user === undefined) return;
@@ -96,12 +94,9 @@ function App() {
 	}
 
 	// subscribe to updates from the database for the jumpers
-	const [dbJumpers, jumperLoading, jumperError] = useCollection(
-		collection(firestore, 'jumpers'),
-		{
-			snapshotListenOptions: { includeMetadataChanges: true },
-		}
-	);
+	const [dbJumpers] = useCollection(collection(firestore, 'jumpers'), {
+		snapshotListenOptions: { includeMetadataChanges: true },
+	});
 
 	const shield = document.getElementById('shield'); // keep a ref to shield
 	const [loadFilter, setLoadFilter] = useState<number[]>([]);
@@ -191,12 +186,9 @@ function App() {
 	const [loadList, setLoadList] = useState<ILoadObject[]>([]);
 
 	// listen for updates to the loads on the database
-	const [dbLoadList, loadsLoading, loadError] = useCollection(
-		collection(firestore, 'loads'),
-		{
-			snapshotListenOptions: { includeMetadataChanges: true },
-		}
-	); //TODO: we'll need to filter this by date
+	const [dbLoadList] = useCollection(collection(firestore, 'loads'), {
+		snapshotListenOptions: { includeMetadataChanges: true },
+	}); //TODO: we'll need to filter this by date
 
 	// render loadlist updates from the database
 	useEffect(() => {
