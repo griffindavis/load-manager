@@ -1,9 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { AnyAaaaRecord } from 'dns';
 import {
 	Firestore,
 	doc,
 	QuerySnapshot,
 	DocumentData,
+	setDoc,
+	deleteDoc,
 } from 'firebase/firestore';
 import React, { BaseSyntheticEvent, useEffect, useState } from 'react';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
@@ -50,7 +53,6 @@ function Load(
 	const [jumperList, setJumpers] = useState<IJumperObject[]>([]);
 
 	//#region data storage
-
 	const [thisLoad, loading, error] = useDocumentData(
 		doc(firestore, 'loads', id)
 	);
@@ -75,6 +77,7 @@ function Load(
 	 * Once we have the necessary information in the "messaging system" go ahead and try to add that jumper to the load
 	 */
 	useEffect(() => {
+		//TODO: can this be done better now that we can listen to the firestore updates
 		// quit early if we're still missing information
 		if (loadToUpdate.jumper === undefined || loadToUpdate.load === undefined)
 			return;
@@ -99,12 +102,53 @@ function Load(
 	 */
 	function handleCancel(e: BaseSyntheticEvent) {
 		const id = e.target.offsetParent.firstChild.innerText;
-		//TODO: do this better
-		setJumpers(
-			jumperList.filter((entry) => {
-				return entry.id !== id;
-			})
+		let filtered = jumperList.filter((entry) => {
+			return entry.id !== id;
+		});
+		//setJumpers(convertJumperListToFirestore(filtered));
+		let docRef = doc(firestore, 'loads', props.id);
+		setDoc(
+			docRef,
+			{ jumpers: convertJumperListToFirestore(filtered) },
+			{ merge: true }
 		);
+	}
+
+	/**
+	 * Converts the jumper list to a reference doc list that can be used by firestore
+	 * @param jumperList - the list of jumper objects
+	 * @returns
+	 */
+	function convertJumperListToFirestore(jumperList: IJumperObject[]) {
+		const array: any[] = [];
+		jumperList.forEach((jumper) => {
+			array.push(doc(firestore, 'jumpers', jumper.id));
+		});
+		console.log(array);
+		return array;
+	}
+
+	/**
+	 * Adds a jumper to the load, does not perform the validation
+	 */
+	function addJumperToLoad(jumperId: string) {
+		if (jumperList.length >= 4) {
+			alert(`You cannot add yourself to the load, it is already full :(`);
+		} else if (loadContainsJumper(jumperId)) {
+			alert(`You're already on this load!`);
+		} else {
+			let docRef = doc(firestore, 'loads', props.id);
+			setDoc(
+				docRef,
+				{
+					jumpers: [
+						...convertJumperListToFirestore(jumperList),
+						doc(firestore, 'jumpers', jumperId),
+					],
+				},
+				{ merge: true }
+			);
+		}
 	}
 
 	/**
@@ -137,9 +181,7 @@ function Load(
 				alert(`You cannot add ${newName} to the load, it is already full :(`);
 			} else if (newId !== '') {
 				if (!loadContainsJumper(newId)) {
-					setJumpers((prevJumpers) => {
-						return [...prevJumpers, { id: newId, name: newName }];
-					});
+					addJumperToLoad(newId);
 				} else {
 					alert(`${newName} is already on this load!`);
 				}
@@ -160,16 +202,20 @@ function Load(
 	 * Handles logic for deleting a load
 	 */
 	function handleLoadDelete() {
-		removeLoad(id);
+		deleteDoc(doc(firestore, 'loads', props.id));
 	}
 
 	/**
 	 * Handles logic for adding the logged in user to a load
 	 */
 	function handleAddMe() {
-		setJumpers((prevJumpers) => {
-			return [...prevJumpers, { id: userInfo.id, name: userInfo.name }];
-		});
+		if (userInfo.jumper !== null && userInfo.jumper !== undefined) {
+			console.log(userInfo.jumper);
+			addJumperToLoad(userInfo.jumper);
+		}
+		// setJumpers((prevJumpers) => {
+		// 	return [...prevJumpers, { id: userInfo.id, name: userInfo.name }];
+		// });
 	}
 
 	/**
@@ -207,7 +253,7 @@ function Load(
 			}}
 		>
 			<div className="loadHeader">
-				<div className="loadId">{number?.toString()}</div>
+				<div className="loadId">{thisLoad?.number?.toString()}</div>
 				{userInfo.canRemoveLoads ? (
 					<div className="deleteLoad" onClick={handleLoadDelete}>
 						X

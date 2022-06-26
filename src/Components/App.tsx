@@ -70,6 +70,8 @@ function App() {
 			name: user.Name,
 			isCheckedIn: user.isCheckedIn,
 			canRemoveLoads: user.canRemoveLoads,
+			canRemoveJumpers: user.canRemoveJumpers,
+			jumper: user.jumper.id,
 		});
 	}, [user]);
 
