@@ -128,26 +128,6 @@ function App() {
 	}
 
 	//#region Load Specific Details
-	/**
-	 * Constructs the local storage key for a jumper list of a load
-	 * @param loadId - the load ID we're interested in
-	 * @returns the string key
-	 */
-	function getJumperListLocalStorageKey(loadId: string): string {
-		return 'load' + loadId + '.jumperList';
-	}
-
-	/**
-	 * Gets the up-to-date list of jumpers for a load
-	 * @param loadId - the ID of the load to get jumpers from
-	 * @returns an array of jumpers
-	 */
-	function getUpdatedJumperList(loadId: string): IJumperObject[] {
-		const storedJSON: string =
-			localStorage.getItem(getJumperListLocalStorageKey(loadId)) || '';
-		if (storedJSON === '') return [];
-		return JSON.parse(storedJSON);
-	}
 
 	/**
 	 * Function to filter the loads to only this user's
@@ -157,7 +137,7 @@ function App() {
 		const myLoads: number[] = [];
 
 		loadList.forEach((load) => {
-			const jumperList = getUpdatedJumperList(load.id);
+			const jumperList = load.jumperList;
 			if (jumperList.length > 0) {
 				jumperList.forEach((jumper) => {
 					if (jumper.id === userId) {
@@ -178,7 +158,7 @@ function App() {
 		const myLoads: ILoadObject[] = [];
 
 		loadList.forEach((load) => {
-			const jumperList = getUpdatedJumperList(load.id);
+			const jumperList = load.jumperList;
 			if (jumperList.length > 0) {
 				jumperList.forEach((jumper) => {
 					if (jumper.id === userId) {
@@ -198,7 +178,7 @@ function App() {
 		if (loadFilter.length > 0) {
 			setLoadFilter([]);
 		} else {
-			const myLoads = getMyLoads(userInfo.id);
+			const myLoads = getMyLoads(userInfo.jumper || '');
 			setLoadFilter(myLoads);
 		}
 	}
@@ -277,7 +257,7 @@ function App() {
 				<Shield handleChangeViewOption={handleChangeViewOption} />
 				<Transactions
 					optionSelected={optionSelected}
-					loadList={getMyLoadDetails(userInfo.id)}
+					loadList={getMyLoadDetails(userInfo.jumper || '')}
 				/>
 				<Menu userInfo={userInfo} optionSelected={optionSelected} auth={auth} />
 				<JumperSelectionPopup
