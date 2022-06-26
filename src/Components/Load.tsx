@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { AnyAaaaRecord } from 'dns';
 import {
 	Firestore,
 	doc,
@@ -88,10 +86,7 @@ function Load(
 			return;
 		}
 		const newId = loadToUpdate.jumper.id;
-		const newName = loadToUpdate.jumper.name;
-		setJumpers((prevJumpers) => {
-			return [...prevJumpers, { id: newId, name: newName }];
-		});
+		addJumperToLoad(newId);
 	}, [loadToUpdate]);
 
 	/**
@@ -154,6 +149,9 @@ function Load(
 	 * @returns true or false
 	 */
 	function loadContainsJumper(id: string) {
+		if (id === '') {
+			return true; // if no jumper, don't allow adding
+		}
 		return (
 			jumperList.filter((entry) => {
 				return entry.id === id;
@@ -217,7 +215,7 @@ function Load(
 	 * @returns true or false
 	 */
 	function isJumperThisUser(jumperId: string) {
-		return jumperId === userInfo.id;
+		return jumperId === userInfo?.jumper;
 	}
 
 	/**
@@ -277,7 +275,7 @@ function Load(
 									</span>
 								);
 						  })}
-					{loadContainsJumper(userInfo.id) ? (
+					{loadContainsJumper(userInfo?.jumper || '') ? (
 						''
 					) : (
 						<li className="addMe jumper card" onClick={handleAddMe}>

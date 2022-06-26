@@ -284,6 +284,7 @@ function App() {
 					optionSelected={optionSelected}
 					handleChangeViewOption={handleChangeViewOption}
 					setLoadToUpdate={setLoadToUpdate}
+					jumperList={dbJumpers}
 				/>
 
 				<FooterNavBar
