@@ -2,7 +2,7 @@ import ILoadObject, { LoadType } from './ILoadObject';
 import { v4 as uuidv4 } from 'uuid';
 import IUserInfo from './IUserInfo';
 import { ViewOptions } from './ViewOptions';
-import { collection, doc, Firestore, setDoc } from 'firebase/firestore';
+import { doc, Firestore, setDoc } from 'firebase/firestore';
 
 function FooterNavBar(props: {
 	firestore: Firestore;
@@ -17,7 +17,7 @@ function FooterNavBar(props: {
 		loadList,
 		setLoadList,
 		userInfo,
-		
+
 		handleChangeViewOption,
 		optionSelected,
 	} = props; // destructure props

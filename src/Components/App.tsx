@@ -21,8 +21,8 @@ import 'firebase/analytics';
 import 'firebase/firestore';
 
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { getFirestore, doc } from 'firebase/firestore';
-import { useDocument, useDocumentData } from 'react-firebase-hooks/firestore';
+import { getFirestore, doc, collection } from 'firebase/firestore';
+import { useCollection, useDocumentData } from 'react-firebase-hooks/firestore';
 
 // Import the functions you need from the SDKs you need
 
@@ -196,16 +196,49 @@ function App() {
 
 	//#region Maintain load state at the app level
 	const [loadList, setLoadList] = useState<ILoadObject[]>([]);
+	const [dbLoadList, loadsLoading, loadError] = useCollection(
+		collection(firestore, 'loads'),
+		{
+			snapshotListenOptions: { includeMetadataChanges: true },
+		}
+	);
+
+	useEffect(() => {
+		const array: ILoadObject[] = [];
+		dbLoadList?.docs.forEach((load) => {
+			console.log(load.data());
+			array.push({
+				jumperList: convertJumperListToArray(load.data().jumpers),
+				id: load.id,
+				number: load.data().Number,
+				type: load.data().Type,
+			});
+		});
+
+		setLoadList(array);
+	}, [dbLoadList]);
+
+	function convertJumperListToArray(list: any) {
+		const array: IJumperObject[] = [];
+		list.forEach((jumper: IJumperObject) => {
+			array.push({
+				id: jumper.id,
+			});
+		});
+		console.log(array);
+		return array;
+	}
+
 	const LOAD_LOCAL_STORAGE_KEY = 'loadList';
 	const [loadFilter, setLoadFilter] = useState<number[]>([]);
 	const [shieldRaised, setShieldRaised] = useState(false);
 
 	// get the initial stored load list
 	useEffect(() => {
-		const storedJSON: string =
-			localStorage.getItem(LOAD_LOCAL_STORAGE_KEY) || '';
-		if (storedJSON === '') return;
-		setLoadList(JSON.parse(storedJSON));
+		// const storedJSON: string =
+		// 	localStorage.getItem(LOAD_LOCAL_STORAGE_KEY) || '';
+		// if (storedJSON === '') return;
+		// setLoadList(JSON.parse(storedJSON));
 	}, []);
 
 	// update the stored load list whenever it is changed

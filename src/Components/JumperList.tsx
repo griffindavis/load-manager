@@ -25,7 +25,9 @@ function JumperList(props: { firestore: Firestore }) {
 	});
 
 	const { firestore } = props;
+
 	const [jumpers, setJumpers] = useState<IJumperObject[]>([]);
+
 	const [dbJumpers, jumperLoading, jumperError] = useCollection(
 		collection(firestore, 'jumpers'),
 		{

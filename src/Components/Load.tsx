@@ -42,14 +42,16 @@ function Load(
 
 	//#region data storage
 	useEffect(() => {
-		const storedJSON: string = localStorage.getItem(LOCAL_STORAGE_KEY) || '';
-		if (storedJSON.length === 0) {
-			// this is the case when we create a new load
-			setJumpers(initialJumperList);
-		} else {
-			setJumpers(JSON.parse(storedJSON));
-		}
+		// const storedJSON: string = localStorage.getItem(LOCAL_STORAGE_KEY) || '';
+		// if (storedJSON.length === 0) {
+		// 	// this is the case when we create a new load
+		setJumpers(initialJumperList);
+		// } else {
+		// 	setJumpers(JSON.parse(storedJSON));
+		// }
 	}, []);
+
+	console.log(initialJumperList);
 
 	useEffect(() => {
 		localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(jumperList));
