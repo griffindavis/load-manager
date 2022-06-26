@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import Load from './Load';
-import ILoadObject, { LoadType } from './ILoadObject';
+import ILoadObject from './ILoadObject';
 import IUserInfo from './IUserInfo';
 import { ViewOptions } from './ViewOptions';
 import IJumperObject from './IJumperObject';

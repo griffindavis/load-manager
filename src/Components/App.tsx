@@ -290,7 +290,6 @@ function App() {
 				<FooterNavBar
 					firestore={firestore}
 					loadList={loadList}
-					setLoadList={setLoadList}
 					userInfo={userInfo}
 					setLoadFilter={setLoadFilter}
 					handleChangeViewOption={handleChangeViewOption}

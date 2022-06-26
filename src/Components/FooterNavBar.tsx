@@ -1,13 +1,11 @@
 import ILoadObject, { LoadType } from './ILoadObject';
-import { v4 as uuidv4 } from 'uuid';
 import IUserInfo from './IUserInfo';
 import { ViewOptions } from './ViewOptions';
-import { doc, Firestore, setDoc } from 'firebase/firestore';
+import { addDoc, doc, Firestore, setDoc, collection } from 'firebase/firestore';
 
 function FooterNavBar(props: {
 	firestore: Firestore;
 	loadList: ILoadObject[];
-	setLoadList: React.Dispatch<React.SetStateAction<ILoadObject[]>>;
 	userInfo: IUserInfo;
 	setLoadFilter: React.Dispatch<React.SetStateAction<number[]>>;
 	handleChangeViewOption: (option: ViewOptions) => void;
@@ -15,11 +13,10 @@ function FooterNavBar(props: {
 }) {
 	const {
 		loadList,
-		setLoadList,
 		userInfo,
-
 		handleChangeViewOption,
 		optionSelected,
+		firestore,
 	} = props; // destructure props
 
 	/**
@@ -27,17 +24,13 @@ function FooterNavBar(props: {
 	 */
 	function handleAddNewLoad() {
 		if (optionSelected !== undefined) return; // Don't add a load with the shield raised
-		setLoadList((previousLoads) => {
-			return [
-				...previousLoads,
-				{
-					id: uuidv4().toString(),
-					number: loadList.length + 1,
-					jumperList: [],
-					type: LoadType.high,
-				},
-			];
+
+		addDoc(collection(firestore, 'loads'), {
+			number: loadList.length + 1,
+			type: LoadType.high,
+			jumpers: [],
 		});
+
 		// need to give it time to render
 		setTimeout(() => {
 			const loads = Array.from(document.getElementsByClassName('load card'));
@@ -52,7 +45,7 @@ function FooterNavBar(props: {
 	 * Handles toggling the user's checked in status
 	 */
 	function toggleCheckedIn() {
-		let ref = doc(props.firestore, 'users', userInfo.id);
+		let ref = doc(firestore, 'users', userInfo.id);
 		setDoc(ref, { isCheckedIn: !userInfo.isCheckedIn }, { merge: true });
 	}
 
