@@ -216,7 +216,6 @@ function App() {
 	useEffect(() => {
 		const array: ILoadObject[] = [];
 		dbLoadList?.docs.forEach((load) => {
-			console.log(load.data());
 			array.push({
 				jumperList: convertJumperListToArray(load.data().jumpers),
 				id: load.id,
@@ -245,7 +244,6 @@ function App() {
 				id: jumper.id,
 			});
 		});
-		console.log(array);
 		return array;
 	}
 

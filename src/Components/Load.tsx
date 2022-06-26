@@ -122,7 +122,6 @@ function Load(
 		jumperList.forEach((jumper) => {
 			array.push(doc(firestore, 'jumpers', jumper.id));
 		});
-		console.log(array);
 		return array;
 	}
 
@@ -208,12 +207,8 @@ function Load(
 	 */
 	function handleAddMe() {
 		if (userInfo.jumper !== null && userInfo.jumper !== undefined) {
-			console.log(userInfo.jumper);
 			addJumperToLoad(userInfo.jumper);
 		}
-		// setJumpers((prevJumpers) => {
-		// 	return [...prevJumpers, { id: userInfo.id, name: userInfo.name }];
-		// });
 	}
 
 	/**

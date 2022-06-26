@@ -52,9 +52,7 @@ function FooterNavBar(props: {
 	 * Handles toggling the user's checked in status
 	 */
 	function toggleCheckedIn() {
-		console.log(userInfo.id);
 		let ref = doc(props.firestore, 'users', userInfo.id);
-		console.log(ref);
 		setDoc(ref, { isCheckedIn: !userInfo.isCheckedIn }, { merge: true });
 	}
 
