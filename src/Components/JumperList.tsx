@@ -11,9 +11,7 @@ import Jumper from './Jumper';
 import {
 	addDoc,
 	collection,
-	deleteDoc,
 	Firestore,
-	doc,
 	QuerySnapshot,
 	DocumentData,
 } from 'firebase/firestore';
@@ -29,11 +27,12 @@ function JumperList(props: {
 	});
 
 	const { firestore, dbJumpers } = props;
-
 	const [jumpers, setJumpers] = useState<IJumperObject[]>([]);
+	const jumperNameRef = useRef<HTMLInputElement>(null);
 
+	// listen for changes to the jumper list from the database
 	useEffect(() => {
-		const array: IJumperObject[] = [];
+		const array: IJumperObject[] = []; //TODO: create a function to translate a db jumper to a client object
 		dbJumpers?.docs.forEach((doc) => {
 			array.push({
 				id: doc.id,
@@ -46,17 +45,12 @@ function JumperList(props: {
 		});
 	}, [dbJumpers]);
 
-	useEffect(() => {
-		// force a re-render of the list when we update the filters
-	}, [filters]);
-
-	const jumperNameRef = useRef<HTMLInputElement>(null);
-
 	/**
 	 * Creates a new jumper in the database
 	 * @param name - the name of the jumper
 	 */
 	function createNewJumper(name: string): void {
+		//TODO: we need to be able to add more info here
 		addDoc(collection(firestore, 'jumpers'), {
 			name: name,
 		});
@@ -79,17 +73,6 @@ function JumperList(props: {
 
 				createNewJumper(name);
 			}
-		}
-	}
-
-	/**
-	 * Handles removing the jumper from the stored jumper list
-	 * @param e - the js event
-	 */
-	function removeJumper(e: SyntheticEvent) {
-		const id = e.currentTarget.getAttribute('data-id');
-		if (id !== null) {
-			deleteDoc(doc(firestore, 'jumpers', id));
 		}
 	}
 
@@ -121,7 +104,7 @@ function JumperList(props: {
 						<Jumper
 							key={jumper.id}
 							jumper={jumper}
-							removeJumper={removeJumper}
+							firestore={firestore}
 							filters={filters}
 						/>
 					);

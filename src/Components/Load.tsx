@@ -5,6 +5,7 @@ import {
 	DocumentData,
 	setDoc,
 	deleteDoc,
+	DocumentReference,
 } from 'firebase/firestore';
 import React, { BaseSyntheticEvent, useEffect, useState } from 'react';
 import { useDocumentData } from 'react-firebase-hooks/firestore';
@@ -44,7 +45,7 @@ function Load(
 		loadToUpdate,
 		firestore,
 		dbJumpers,
-	} = props;
+	} = props; //TODO: can probably remove number from here
 
 	const [jumperList, setJumpers] = useState<IJumperObject[]>([]);
 
@@ -54,8 +55,7 @@ function Load(
 	);
 	useEffect(() => {
 		const tempArray: IJumperObject[] = [];
-		const jumperList = thisLoad?.jumpers;
-		jumperList?.forEach((jumper: any) => {
+		thisLoad?.jumpers?.forEach((jumper: any) => {
 			let reference = dbJumpers?.docs.find((doc) => {
 				return doc.id === jumper.id;
 			});
@@ -98,7 +98,6 @@ function Load(
 		let filtered = jumperList.filter((entry) => {
 			return entry.id !== id;
 		});
-		//setJumpers(convertJumperListToFirestore(filtered));
 		let docRef = doc(firestore, 'loads', props.id);
 		setDoc(
 			docRef,
@@ -110,10 +109,10 @@ function Load(
 	/**
 	 * Converts the jumper list to a reference doc list that can be used by firestore
 	 * @param jumperList - the list of jumper objects
-	 * @returns
+	 * @returns - an array of document references
 	 */
 	function convertJumperListToFirestore(jumperList: IJumperObject[]) {
-		const array: any[] = [];
+		const array: DocumentReference<DocumentData>[] = [];
 		jumperList.forEach((jumper) => {
 			array.push(doc(firestore, 'jumpers', jumper.id));
 		});

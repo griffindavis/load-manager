@@ -1,4 +1,8 @@
-import { DocumentData, QuerySnapshot } from 'firebase/firestore';
+import {
+	DocumentData,
+	QueryDocumentSnapshot,
+	QuerySnapshot,
+} from 'firebase/firestore';
 import IJumperObject from './IJumperObject';
 import Jumper from './Jumper';
 import { ViewOptions } from './ViewOptions';
@@ -25,7 +29,14 @@ function JumperSelectionPopup(props: {
 		props.handleChangeViewOption(ViewOptions.none);
 	}
 
-	function convertDBJumperToObject(dbJumper: any) {
+	/**
+	 * Converts a database jumper object to a client object
+	 * @param dbJumper - the database jumper object
+	 * @returns
+	 */
+	function convertDBJumperToObject(
+		dbJumper: QueryDocumentSnapshot<DocumentData>
+	) {
 		return {
 			id: dbJumper.id,
 			name: dbJumper.data().name,

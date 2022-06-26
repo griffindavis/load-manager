@@ -1,12 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
+import { deleteDoc, doc, Firestore } from 'firebase/firestore';
 import { SyntheticEvent } from 'react';
 import IJumperObject from './IJumperObject';
 
 function Jumper(props: {
 	key: string;
 	jumper: IJumperObject;
-	removeJumper?: (e: SyntheticEvent) => void;
+	firestore?: Firestore;
 	filters?: {
 		video: boolean;
 		instructor: boolean;
@@ -20,8 +21,17 @@ function Jumper(props: {
 		}>
 	>;
 }) {
-	const fromPopup = props.fromPopup;
-	const data = props.jumper;
+	const { firestore, jumper, fromPopup } = props;
+
+	/**
+	 * Handles removing the jumper from the stored jumper list
+	 */
+	function removeJumper() {
+		if (jumper.id !== null && firestore !== undefined) {
+			deleteDoc(doc(firestore, 'jumpers', jumper.id));
+		}
+		// TODO: maybe we should prevent actually deleting these and just mark them as not deleted?
+	}
 
 	/**
 	 * Handles jumper type filtering
@@ -65,9 +75,9 @@ function Jumper(props: {
 	 */
 	function isFiltered(): boolean {
 		// don't render if filtered out
-		if (props.filters?.instructor && !data.isInstructor) return true;
-		if (props.filters?.video && !data.isVideographer) return true;
-		if (props.filters?.student && !data.isStudent) return true;
+		if (props.filters?.instructor && !jumper.isInstructor) return true;
+		if (props.filters?.video && !jumper.isVideographer) return true;
+		if (props.filters?.student && !jumper.isStudent) return true;
 		return false;
 	}
 
@@ -89,7 +99,7 @@ function Jumper(props: {
 	function simpleJumper() {
 		return (
 			<span className="item card" onClick={handleAddJumperByClick}>
-				<div className="header">{data.name}</div>
+				<div className="header">{jumper.name}</div>
 			</span>
 		);
 	}
@@ -107,16 +117,12 @@ function Jumper(props: {
 					}`}
 					draggable="true"
 					onDragStart={(event) => {
-						event.dataTransfer.setData('text/jumper', JSON.stringify(data));
+						event.dataTransfer.setData('text/jumper', JSON.stringify(jumper));
 					}}
 					onClick={handleClick}
 				>
-					<div className="header">{data.name}</div>
-					<div
-						className="cancel"
-						onClick={props.removeJumper}
-						data-id={data.id}
-					>
+					<div className="header">{jumper.name}</div>
+					<div className="cancel" onClick={removeJumper}>
 						X
 					</div>
 				</span>
@@ -126,7 +132,7 @@ function Jumper(props: {
 						<span className="dropdown-button">
 							<i
 								className={`fas fa-video faImage ${
-									data.isVideographer ? 'selected' : ''
+									jumper.isVideographer ? 'selected' : ''
 								}`}
 								onClick={handleTypeSelection}
 								data-type="video"
@@ -135,7 +141,7 @@ function Jumper(props: {
 						<span className="dropdown-button">
 							<i
 								className={`fas fa-chalkboard-teacher faImage ${
-									data.isInstructor ? 'selected' : ''
+									jumper.isInstructor ? 'selected' : ''
 								}`}
 								onClick={handleTypeSelection}
 								data-type="instructor"
@@ -144,7 +150,7 @@ function Jumper(props: {
 						<span className="dropdown-button">
 							<i
 								className={`fas fa-users faImage ${
-									data.isStudent ? 'selected' : ''
+									jumper.isStudent ? 'selected' : ''
 								}`}
 								onClick={handleTypeSelection}
 								data-type="student"

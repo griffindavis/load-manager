@@ -18,6 +18,7 @@ function Menu(props: {
 		props.auth.signOut();
 	}
 
+	//TODO: implement edit user info
 	return (
 		<section className="menu-container">
 			<div className="item card clickable">Edit User Info</div>

@@ -73,7 +73,7 @@ function App() {
 			canRemoveJumpers: user.canRemoveJumpers,
 			jumper: user.jumper.id,
 		});
-	}, [user]);
+	}, [user]); //TODO: Could this be a custom hook
 
 	//endregion User Info
 
@@ -81,13 +81,6 @@ function App() {
 	const [optionSelected, setOptionSelected] = useState<
 		ViewOptions | undefined
 	>();
-
-	const [dbJumpers, jumperLoading, jumperError] = useCollection(
-		collection(firestore, 'jumpers'),
-		{
-			snapshotListenOptions: { includeMetadataChanges: true },
-		}
-	);
 
 	/**
 	 * Handles switching the view options and raising / lowering the shield
@@ -102,7 +95,17 @@ function App() {
 		}
 	}
 
+	// subscribe to updates from the database for the jumpers
+	const [dbJumpers, jumperLoading, jumperError] = useCollection(
+		collection(firestore, 'jumpers'),
+		{
+			snapshotListenOptions: { includeMetadataChanges: true },
+		}
+	);
+
 	const shield = document.getElementById('shield'); // keep a ref to shield
+	const [loadFilter, setLoadFilter] = useState<number[]>([]);
+	const [shieldRaised, setShieldRaised] = useState(false);
 	// TODO: useref?
 
 	//#endregion App State
@@ -149,6 +152,7 @@ function App() {
 		return myLoads; // TODO: retire this function
 	}
 	// #endregion End Load Specific Details
+
 	/**
 	 * Get's the load objects for loads that this user is on
 	 * @param userId - the user ID that is logged in
@@ -185,19 +189,21 @@ function App() {
 
 	//#region Maintain load state at the app level
 	const [loadList, setLoadList] = useState<ILoadObject[]>([]);
+
+	// listen for updates to the loads on the database
 	const [dbLoadList, loadsLoading, loadError] = useCollection(
 		collection(firestore, 'loads'),
 		{
 			snapshotListenOptions: { includeMetadataChanges: true },
 		}
-	);
+	); //TODO: we'll need to filter this by date
 
 	// render loadlist updates from the database
 	useEffect(() => {
 		const array: ILoadObject[] = [];
 		dbLoadList?.docs.forEach((load) => {
 			array.push({
-				jumperList: convertJumperListToArray(load.data().jumpers),
+				jumperList: convertJumperListToArray(load.data().jumpers), //TODO: maybe remove this
 				id: load.id,
 				number: load.data().number,
 				type: load.data().Type,
@@ -214,9 +220,9 @@ function App() {
 		});
 
 		setLoadList(array);
-	}, [dbLoadList]);
+	}, [dbLoadList]); //TODO: can this be a custom hook?
 
-	//TODO: do we really need to know about the jumpers at this point?
+	//TODO: do we really need to know about the jumpers at this point? I don't think so
 	function convertJumperListToArray(list: any) {
 		const array: IJumperObject[] = [];
 		list.forEach((jumper: IJumperObject) => {
@@ -226,9 +232,6 @@ function App() {
 		});
 		return array;
 	}
-
-	const [loadFilter, setLoadFilter] = useState<number[]>([]);
-	const [shieldRaised, setShieldRaised] = useState(false);
 
 	///#endregionend load state
 
@@ -279,6 +282,7 @@ function App() {
 		);
 	}
 
+	// TODO: can we use Routes here?
 	return (
 		<div className="App">
 			<Helmet>

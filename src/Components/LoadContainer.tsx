@@ -150,7 +150,7 @@ function LoadContainer(props: {
 
 		// actually set the values
 		setDraggingLoad(id, position);
-		setLoadList([...newList]);
+		setLoadList([...newList]); //TODO: need to figure out which load numbers to update and then send that to the database
 	}
 
 	/**
