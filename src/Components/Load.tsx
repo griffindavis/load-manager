@@ -18,7 +18,6 @@ function Load(
 	props: {
 		id: string;
 		number: number;
-		removeLoad: (id: string) => void;
 		setDraggingLoad: (loadId: string, num: number) => void;
 		userInfo: IUserInfo;
 		handleChangeViewOption: (option: ViewOptions) => void;
@@ -40,7 +39,6 @@ function Load(
 	const {
 		id,
 		number,
-		removeLoad,
 		setDraggingLoad,
 		userInfo,
 		handleChangeViewOption,

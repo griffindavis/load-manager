@@ -1,11 +1,17 @@
 import React, { useRef } from 'react';
 import Load from './Load';
-import { v4 as uuidv4 } from 'uuid';
 import ILoadObject, { LoadType } from './ILoadObject';
 import IUserInfo from './IUserInfo';
 import { ViewOptions } from './ViewOptions';
 import IJumperObject from './IJumperObject';
-import { DocumentData, Firestore, QuerySnapshot } from 'firebase/firestore';
+import {
+	doc,
+	addDoc,
+	DocumentData,
+	Firestore,
+	QuerySnapshot,
+	collection,
+} from 'firebase/firestore';
 
 function LoadContainer(props: {
 	loadList: ILoadObject[];
@@ -55,6 +61,19 @@ function LoadContainer(props: {
 	}
 
 	/**
+	 * Function to add a new load to the list with an initial jumper
+	 * @param jumperId - the ID of the initial jumper
+	 */
+	function addNewLoad(jumperId: string) {
+		let jumperRef = doc(firestore, 'jumpers', jumperId);
+		addDoc(collection(firestore, 'loads'), {
+			number: loadList.length + 1,
+			type: 'High',
+			jumpers: [jumperRef],
+		});
+	}
+
+	/**
 	 * Handles dropping an element on a load
 	 * @param event - drag event
 	 */
@@ -66,21 +85,10 @@ function LoadContainer(props: {
 		if (event.dataTransfer.types[0] === 'text/jumper') {
 			const data = JSON.parse(event.dataTransfer.getData('text/jumper'));
 
-			const jumperId = data.id;
-			const jumperName = data.name;
+			const jumperId: string = data.id;
 
 			if (jumperId !== '') {
-				setLoadList((previousLoads) => {
-					return [
-						...previousLoads,
-						{
-							id: uuidv4().toString(),
-							number: loadList.length + 1,
-							jumperList: [{ id: jumperId, name: jumperName }],
-							type: LoadType.high,
-						},
-					];
-				});
+				addNewLoad(jumperId);
 			} else {
 			}
 			setTimeout(() => {
@@ -201,27 +209,6 @@ function LoadContainer(props: {
 		reorderLoads(draggingLoadId.current, position);
 	}
 
-	/**
-	 * Removes a load from the list
-	 * @param id - the load ID to remove
-	 */
-	function removeLoad(id: string) {
-		let count = 0;
-
-		loadList.forEach((load) => {
-			// backfill any necessary load number changes
-			if (load.id === id) return;
-			count++;
-			load.number = count;
-		});
-
-		setLoadList(
-			loadList.filter((load) => {
-				return load.id !== id;
-			})
-		);
-	}
-
 	return (
 		<>
 			<div
@@ -239,7 +226,6 @@ function LoadContainer(props: {
 							id={load.id}
 							number={load.number}
 							key={load.id}
-							removeLoad={removeLoad}
 							setDraggingLoad={setDraggingLoad}
 							userInfo={userInfo}
 							handleChangeViewOption={handleChangeViewOption}

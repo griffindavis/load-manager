@@ -220,9 +220,18 @@ function App() {
 			array.push({
 				jumperList: convertJumperListToArray(load.data().jumpers),
 				id: load.id,
-				number: load.data().Number,
+				number: load.data().number,
 				type: load.data().Type,
 			});
+		});
+
+		// make sure we're sorted correctly
+		array.sort((a, b) => {
+			if (a.number < b.number) {
+				return -1;
+			} else {
+				return 1;
+			}
 		});
 
 		setLoadList(array);
